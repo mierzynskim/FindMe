@@ -54,7 +54,7 @@ public class MainActivity extends Activity {
 			e.printStackTrace();
 		}
 		
-		authenticate();
+		//authenticate();
 
 		
 		//ListView listView = (ListView) findViewById(R.id.myList);
@@ -213,32 +213,6 @@ public class MainActivity extends Activity {
 		});
 		
 	}
-	
-	private void authenticate() {
-
-		mClient.login(MobileServiceAuthenticationProvider.Facebook,
-		        new UserAuthenticationCallback() {
-
-
-		            @Override
-		            public void onCompleted(MobileServiceUser user,
-		                    Exception exception, ServiceFilterResponse response) {
-
-
-		                if (exception == null) {
-		                    Log.i("FindMeLOG",
-		                                    "You are now logged in - %1$2s" +
-		                                    user.getUserId() + "Success");
-		                    mUserId = user.getUserId();
-		                  
-		                } else {
-		                    Log.i("FindMeLOG","You must log in. Login Required" + "Error");
-		                }
-		            }
-		        });
-
-
-		}
 
 }
 

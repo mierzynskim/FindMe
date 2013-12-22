@@ -34,6 +34,7 @@
             android:name="com.mini.findmeapp.LoginActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateVisible"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
