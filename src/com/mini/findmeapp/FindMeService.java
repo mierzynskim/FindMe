@@ -13,21 +13,26 @@ public class FindMeService extends Service {
 	
 	private Timer mTimer = new Timer();
 	private int counter;
+	private String userId;
+	private double langitude;
+	private double longitude;
 	
 	
 	//Metoda wywo³ywana przy utworzeniu serwisu
 	//Wykonuje wstêpn¹ konfiguracjê i uruchamia timer
 	@Override
-	public void onCreate() 
+	public void onStart(Intent intent, int startId) 
 	{
-		super.onCreate();
+		super.onStart(intent, startId);
 		
 		Log.i("service", "xxx Service Started");
 		counter = 0;
-		
-		
+		userId = intent.getStringExtra(ServiceProxy.UserIdTag);
+
 		//Wystartowanie timera
 		mTimer.scheduleAtFixedRate(new TimerTask(){public void run(){onTimerTick();}}, 0, 1000L);
+		
+		
 		
 	};
 	
@@ -45,7 +50,7 @@ public class FindMeService extends Service {
 	private void onTimerTick()
 	{
 		counter++;
-		Log.i("service","xxx "+Integer.toString(counter));
+		Log.i("service","xxx "+Integer.toString(counter) + " " + userId);
 		
 		
 	};

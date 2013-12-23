@@ -41,6 +41,7 @@ public class MainActivity extends Activity {
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private String[] mGroupNames;
+    private ServiceProxy mServiceProxy;
 
 
     @Override
@@ -56,7 +57,8 @@ public class MainActivity extends Activity {
 		}
 		
 		//Wystartowanie serwisu
-		startService(new Intent(MainActivity.this,FindMeService.class ));
+		mServiceProxy = new ServiceProxy(this, mUserId);
+		mServiceProxy.StartService();
 		
 		//authenticate();
 
@@ -119,9 +121,8 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() 
     {
-    	stopService(new Intent(MainActivity.this,FindMeService.class));
+    	mServiceProxy.StopService();
     	super.onDestroy();
-    	
     };
     
 
