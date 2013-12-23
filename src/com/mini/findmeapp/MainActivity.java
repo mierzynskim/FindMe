@@ -1,5 +1,6 @@
 package com.mini.findmeapp;
 
+
 import java.net.MalformedURLException;
 
 import android.app.Activity;
@@ -53,6 +54,9 @@ public class MainActivity extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		//Wystartowanie serwisu
+		startService(new Intent(MainActivity.this,FindMeService.class ));
 		
 		//authenticate();
 
@@ -109,6 +113,17 @@ public class MainActivity extends Activity {
 //            selectItem(0);
 //        }
     }
+    
+    
+    //Przy zniszczeniu aplikacji dodatkowo zatrzymujemy serwis
+    @Override
+    protected void onDestroy() 
+    {
+    	stopService(new Intent(MainActivity.this,FindMeService.class));
+    	super.onDestroy();
+    	
+    };
+    
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
