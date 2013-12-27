@@ -1,7 +1,5 @@
 package com.mini.findmeapp;
 
-
-
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
@@ -38,14 +36,13 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-		
 		//Wystartowanie serwisu
 		mServiceProxy = new ServiceProxy(this, mUserId);
 		mServiceProxy.StartService();
 		
 		Intent intent = getIntent();
 		mUserId = intent.getStringExtra(LoginActivity.USER_ID);
-		Toast.makeText(this, mUserId,  Toast.LENGTH_LONG).show();
+		Toast.makeText(this, mUserId, Toast.LENGTH_LONG).show();
 		
 
         mTitle = mDrawerTitle = getTitle();

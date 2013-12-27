@@ -1,79 +1,109 @@
+
 package com.mini.findmeapp;
 
-
-import java.util.Arrays;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
+import android.support.v4.app.FragmentActivity;
 
-import com.facebook.FacebookException;
+import com.facebook.AppEventsLogger;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
+import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
-import com.facebook.widget.LoginButton.OnErrorListener;
 
-public class LoginActivity extends Activity {
-	private String TAG = "LoginActivity";
-	public final static String USER_ID = "com.example.myfirstapp.USERID";
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+public class LoginActivity extends FragmentActivity {
 
-		setContentView(R.layout.activity_login);
+    public static String USER_ID;
 
-		LoginButton authButton = (LoginButton) findViewById(R.id.authButton);
-		authButton.setOnErrorListener(new OnErrorListener() {
-			@Override
-			public void onError(FacebookException error) {
-				Log.i(TAG, "Error " + error.getMessage());
-			}
-		});
-		
-		authButton.setReadPermissions(Arrays.asList("basic_info","email"));
-		authButton.setSessionStatusCallback(new Session.StatusCallback() {
+    private UiLifecycleHelper uiHelper;
 
-			@Override
-			public void call(Session session, SessionState state, Exception exception) {
+    private Session.StatusCallback callback = new Session.StatusCallback() {
+        @Override
+        public void call(Session session, SessionState state, Exception exception) {
+            onSessionStateChange(session, state, exception);
+        }
 
-				if (session.isOpened()) {
-					Log.i(TAG,"Access Token"+ session.getAccessToken());
-					Request.newMeRequest(session, new Request.GraphUserCallback() {
-						// callback after Graph API response with user object
-						@Override
-						public void onCompleted(GraphUser user, Response response) {
-							if (user != null) {
-								Log.i(TAG,"User ID "+ user.getId());
-								Log.i(TAG,"Email "+ user.asMap().get("email"));
-								Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-								intent.putExtra(USER_ID, user.getId());
-								startActivity(intent);
-							}
-						}
-					}).executeAsync();
-				}
-
-			}
-		});
+    };
+    
+	private void onSessionStateChange(Session session, SessionState state,
+			Exception exception) {
+		final Session tmpSession = session;
+        if (tmpSession != null && tmpSession.isOpened()) {
+        	
+            Request.newMeRequest(tmpSession, new Request.GraphUserCallback() {
+                @Override
+                public void onCompleted(GraphUser user, Response response) {
+                    if (tmpSession == Session.getActiveSession()) {
+                        if (user != null) {
+                        	LoginActivity.this.user = user;
+                        	Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        	intent.putExtra(USER_ID, user.getId());
+                        	startActivity(intent);
+                        	finish();
+                        }   
+                    }   
+                }   
+            }).executeAsync();
+        	
+        }   
 	}
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
-	}
+	private LoginButton loginButton;
+	protected GraphUser user;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        uiHelper = new UiLifecycleHelper(this, callback);
+        uiHelper.onCreate(savedInstanceState);
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.login, menu);
-		return true;
-	}
+        setContentView(R.layout.activity_login);
 
+        loginButton = (LoginButton) findViewById(R.id.authButton);
+        loginButton.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
+            @Override
+            public void onUserInfoFetched(GraphUser user) {
+                LoginActivity.this.user = user;
+            }
+        });
+        
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        uiHelper.onResume();
+
+        AppEventsLogger.activateApp(this);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        uiHelper.onSaveInstanceState(outState);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        uiHelper.onActivityResult(requestCode, resultCode, data, null);
+        
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        uiHelper.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        uiHelper.onDestroy();
+    }
 }
