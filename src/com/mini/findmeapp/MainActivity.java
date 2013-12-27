@@ -14,7 +14,10 @@ import com.mini.findmeapp.NavigationDrawer.NavMenuSection;
 
 public class MainActivity extends AbstractNavDrawerActivity {
 
-	private String mUserId = "abc";
+	private String mUserId = "1";
+	private String mEventId = "1";
+	private String mGroupId = "1";
+	private String mCaption = "opis na mapce";
     private ServiceProxy mServiceProxy;
 
 
@@ -25,29 +28,29 @@ public class MainActivity extends AbstractNavDrawerActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new GoogleMapFragment()).commit();
         //setContentView(R.layout.activity_main);
         
-		//Wystartowanie serwisu
-		mServiceProxy = new ServiceProxy(this, mUserId);
-		mServiceProxy.StartService();
-		
-		recieveIntent();
+                //Wystartowanie serwisu
+                mServiceProxy = new ServiceProxy(this, mUserId, mEventId, mGroupId, mCaption);
+                mServiceProxy.StartService();
+                
+                recieveIntent();
 
     }
     
     private void recieveIntent()
     {
-		Intent intent = getIntent();
-		
-		mUserId = intent.getStringExtra(LoginActivity.USER_ID);
-		Toast.makeText(this, mUserId, Toast.LENGTH_LONG).show();
+                Intent intent = getIntent();
+                
+                mUserId = intent.getStringExtra(LoginActivity.USER_ID);
+                Toast.makeText(this, mUserId, Toast.LENGTH_LONG).show();
     }
     
     
     //Przy zniszczeniu aplikacji dodatkowo zatrzymujemy serwis
     @Override
-    protected void onDestroy() 
+    protected void onDestroy()
     {
-    	mServiceProxy.StopService();
-    	super.onDestroy();
+            mServiceProxy.StopService();
+            super.onDestroy();
     }
 
     @Override
@@ -68,7 +71,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
         navDrawerActivityConfiguration.setDrawerLayoutId(R.id.drawer_layout);
         navDrawerActivityConfiguration.setLeftDrawerId(R.id.left_drawer);
         navDrawerActivityConfiguration.setNavItems(menu);
-        navDrawerActivityConfiguration.setDrawerShadow(R.drawable.drawer_shadow);       
+        navDrawerActivityConfiguration.setDrawerShadow(R.drawable.drawer_shadow);
         navDrawerActivityConfiguration.setDrawerOpenDesc(R.string.drawer_open);
         navDrawerActivityConfiguration.setDrawerCloseDesc(R.string.drawer_close);
         navDrawerActivityConfiguration.setBaseAdapter(
@@ -76,16 +79,16 @@ public class MainActivity extends AbstractNavDrawerActivity {
         return navDrawerActivityConfiguration;
     }
 
-	@Override
-	protected void onNavItemSelected(int id) {
+        @Override
+        protected void onNavItemSelected(int id) {
         switch ((int)id) {
         case 301:
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
             break;
         }
-		
-	};
+                
+        };
     
 
 

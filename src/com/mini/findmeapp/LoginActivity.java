@@ -71,6 +71,13 @@ public class LoginActivity extends FragmentActivity {
             }
         });
         
+        //Kod do ominięcia logowania
+        //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+    	//intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    	//intent.putExtra(USER_ID, "1");
+    	//startActivity(intent);
+    	//Koniec
+        
     }
     
     @Override
