@@ -12,7 +12,6 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
-import com.facebook.widget.LoginButton;
 
 public class LoginActivity extends FragmentActivity {
 
@@ -52,7 +51,6 @@ public class LoginActivity extends FragmentActivity {
         }   
 	}
 
-	private LoginButton loginButton;
 	protected GraphUser user;
 
     @Override
@@ -63,21 +61,7 @@ public class LoginActivity extends FragmentActivity {
 
         setContentView(R.layout.activity_login);
 
-        loginButton = (LoginButton) findViewById(R.id.authButton);
-        loginButton.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
-            @Override
-            public void onUserInfoFetched(GraphUser user) {
-                LoginActivity.this.user = user;
-            }
-        });
-        
-        //Kod do ominięcia logowania
-        //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-    	//intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-    	//intent.putExtra(USER_ID, "1");
-    	//startActivity(intent);
-    	//Koniec
-        
+
     }
     
     @Override

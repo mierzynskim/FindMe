@@ -8,16 +8,31 @@
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+    
+<!--     DO NOT REMOVE THIS VIEW! It fixes problem with drawer in Android 4.0.3 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent" />
 
     <ListView
         android:id="@+id/left_drawer"
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:background="#111"
         android:choiceMode="singleChoice"
         android:divider="@android:color/darker_gray"
-        android:dividerHeight="0.1dp"
-        android:background="#111" />
-    
+        android:dividerHeight="0.1dp" />
+
+    <ListView
+        android:id="@+id/right_drawer"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:background="#111"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="0.1dp" />
 
 </android.support.v4.widget.DrawerLayout>

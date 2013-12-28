@@ -8,11 +8,14 @@ public class NavDrawerActivityConfiguration {
     private int drawerShadow;
     private int drawerLayoutId;
     private int leftDrawerId;
+    private int rightDrawerId;
     private int[] actionMenuItemsToHideWhenDrawerOpen;
-    private NavDrawerItem[] navItems;
+    private NavDrawerItem[] navItemsLeft;
+    private NavDrawerItem[] navItemsRight;
     private int drawerOpenDesc;
     private int drawerCloseDesc;
-    private BaseAdapter baseAdapter;
+    private BaseAdapter baseAdapterLeft;
+    private BaseAdapter baseAdapterRight;
 
     public int getMainLayout() {
         return mainLayout;
@@ -45,6 +48,14 @@ public class NavDrawerActivityConfiguration {
     public void setLeftDrawerId(int leftDrawerId) {
         this.leftDrawerId = leftDrawerId;
     }
+    
+	public int getRightDrawerId() {
+		return rightDrawerId;
+	}
+
+	public void setRightDrawerId(int rightDrawerId) {
+		this.rightDrawerId = rightDrawerId;
+	}
 
     public int[] getActionMenuItemsToHideWhenDrawerOpen() {
         return actionMenuItemsToHideWhenDrawerOpen;
@@ -55,12 +66,20 @@ public class NavDrawerActivityConfiguration {
         this.actionMenuItemsToHideWhenDrawerOpen = actionMenuItemsToHideWhenDrawerOpen;
     }
 
-    public NavDrawerItem[] getNavItems() {
-        return navItems;
+    public NavDrawerItem[] getNavItemsLeft() {
+        return navItemsLeft;
     }
 
-    public void setNavItems(NavDrawerItem[] navItems) {
-        this.navItems = navItems;
+    public void setNavItemsLeft(NavDrawerItem[] navItems) {
+        this.navItemsLeft = navItems;
+    }
+    
+    public NavDrawerItem[] getNavItemsRight() {
+        return navItemsRight;
+    }
+
+    public void setNavItemsRight(NavDrawerItem[] navItems) {
+        this.navItemsRight = navItems;
     }
 
     public int getDrawerOpenDesc() {
@@ -79,11 +98,23 @@ public class NavDrawerActivityConfiguration {
         this.drawerCloseDesc = drawerCloseDesc;
     }
 
-    public BaseAdapter getBaseAdapter() {
-        return baseAdapter;
+    public BaseAdapter getBaseAdapterLeft() {
+        return baseAdapterLeft;
     }
 
-    public void setBaseAdapter(BaseAdapter baseAdapter) {
-        this.baseAdapter = baseAdapter;
+    public void setBaseAdapterLeft(BaseAdapter baseAdapter) {
+        this.baseAdapterLeft = baseAdapter;
     }
+    
+    public BaseAdapter getBaseAdapterRight() {
+        return baseAdapterRight;
+    }
+
+    public void setBaseAdapterRight(BaseAdapter baseAdapter) {
+        this.baseAdapterRight = baseAdapter;
+    }
+    
+    
+
+
 }

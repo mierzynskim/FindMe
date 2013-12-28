@@ -20,7 +20,8 @@ public abstract class AbstractNavDrawerActivity extends FragmentActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     
-    private ListView mDrawerList;
+    private ListView mDrawerListLeft;
+    private ListView mDrawerListRight;
     
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
@@ -42,9 +43,13 @@ public abstract class AbstractNavDrawerActivity extends FragmentActivity {
         mTitle = mDrawerTitle = getTitle();
         
         mDrawerLayout = (DrawerLayout) findViewById(navConf.getDrawerLayoutId());
-        mDrawerList = (ListView) findViewById(navConf.getLeftDrawerId());
-        mDrawerList.setAdapter(navConf.getBaseAdapter());
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        mDrawerListLeft = (ListView) findViewById(navConf.getLeftDrawerId());
+        mDrawerListLeft.setAdapter(navConf.getBaseAdapterLeft());
+        mDrawerListLeft.setOnItemClickListener(new DrawerItemClickListener());
+        
+        mDrawerListRight = (ListView) findViewById(navConf.getRightDrawerId());
+        mDrawerListRight.setAdapter(navConf.getBaseAdapterRight());
+        mDrawerListRight.setOnItemClickListener(new DrawerItemClickListener());
         
         this.initDrawerShadow();
         
@@ -94,7 +99,7 @@ public abstract class AbstractNavDrawerActivity extends FragmentActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         if ( navConf.getActionMenuItemsToHideWhenDrawerOpen() != null ) {
-            boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+            boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerListLeft);
             for( int iItem : navConf.getActionMenuItemsToHideWhenDrawerOpen()) {
                 menu.findItem(iItem).setVisible(!drawerOpen);
             }
@@ -115,11 +120,11 @@ public abstract class AbstractNavDrawerActivity extends FragmentActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ( keyCode == KeyEvent.KEYCODE_MENU ) {
-            if ( this.mDrawerLayout.isDrawerOpen(this.mDrawerList)) {
-                this.mDrawerLayout.closeDrawer(this.mDrawerList);
+            if ( this.mDrawerLayout.isDrawerOpen(this.mDrawerListLeft)) {
+                this.mDrawerLayout.closeDrawer(this.mDrawerListLeft);
             }
             else {
-                this.mDrawerLayout.openDrawer(this.mDrawerList);
+                this.mDrawerLayout.openDrawer(this.mDrawerListLeft);
             }
             return true;
         }
@@ -142,17 +147,17 @@ public abstract class AbstractNavDrawerActivity extends FragmentActivity {
     }
     
     public void selectItem(int position) {
-        NavDrawerItem selectedItem = navConf.getNavItems()[position];
+        NavDrawerItem selectedItem = navConf.getNavItemsLeft()[position];
         
         this.onNavItemSelected(selectedItem.getId());
-        mDrawerList.setItemChecked(position, true);
+        mDrawerListLeft.setItemChecked(position, true);
         
         if ( selectedItem.updateActionBarTitle()) {
             setTitle(selectedItem.getLabel());
         }
         
-        if ( this.mDrawerLayout.isDrawerOpen(this.mDrawerList)) {
-            mDrawerLayout.closeDrawer(mDrawerList);
+        if ( this.mDrawerLayout.isDrawerOpen(this.mDrawerListLeft)) {
+            mDrawerLayout.closeDrawer(mDrawerListLeft);
         }
     }
     
