@@ -74,10 +74,9 @@ public class ServiceProxy {
   
         // On pressing Settings button
         alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int which) {
+            public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 mMainActivity.startActivity(intent);
-                mMainActivity.finish();
             }
         });
   
