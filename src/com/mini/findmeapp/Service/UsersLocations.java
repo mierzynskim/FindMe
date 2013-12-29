@@ -1,4 +1,4 @@
-package com.mini.findmeapp.AzureConnection;
+package com.mini.findmeapp.Service;
 
 //Klasa trzymaj¹ca rekordy z tabeli UsersLocations
 public class UsersLocations {

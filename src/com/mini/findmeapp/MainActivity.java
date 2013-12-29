@@ -2,8 +2,13 @@ package com.mini.findmeapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
+import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
+import com.mini.findmeapp.AzureConnection.DatabaseProxy;
+import com.mini.findmeapp.AzureConnection.Users;
 import com.mini.findmeapp.NavigationDrawer.AbstractNavDrawerActivity;
 import com.mini.findmeapp.NavigationDrawer.NavDrawerActivityConfiguration;
 import com.mini.findmeapp.NavigationDrawer.NavDrawerAdapter;
@@ -31,8 +36,9 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		//Wystartowanie serwisu
 		mServiceProxy = new ServiceProxy(this, mUserId, mEventId, mGroupId, mCaption);
 		mServiceProxy.StartService();
-
+		
 		recieveIntent();
+		
 
 	}
 

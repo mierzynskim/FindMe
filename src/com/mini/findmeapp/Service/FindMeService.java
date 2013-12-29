@@ -4,7 +4,6 @@ import java.net.MalformedURLException;
 import java.util.Timer;
 import java.util.TimerTask;
 import com.microsoft.windowsazure.mobileservices.*;
-import com.mini.findmeapp.AzureConnection.UsersLocations;
 
 import android.app.Service;
 import android.content.Intent;
