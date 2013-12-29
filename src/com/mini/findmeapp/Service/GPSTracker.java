@@ -1,4 +1,4 @@
-package com.mini.findmeapp;
+package com.mini.findmeapp.Service;
  
 import android.app.Service;
 import android.content.Context;

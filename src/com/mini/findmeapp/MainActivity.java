@@ -10,6 +10,7 @@ import com.mini.findmeapp.NavigationDrawer.NavDrawerAdapter;
 import com.mini.findmeapp.NavigationDrawer.NavDrawerItem;
 import com.mini.findmeapp.NavigationDrawer.NavMenuItem;
 import com.mini.findmeapp.NavigationDrawer.NavMenuSection;
+import com.mini.findmeapp.Service.ServiceProxy;
 
 
 public class MainActivity extends AbstractNavDrawerActivity {

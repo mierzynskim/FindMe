@@ -1,4 +1,4 @@
-package com.mini.findmeapp;
+package com.mini.findmeapp.AzureConnection;
 
 import java.sql.Date;
 

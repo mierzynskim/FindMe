@@ -1,4 +1,6 @@
-package com.mini.findmeapp;
+package com.mini.findmeapp.Service;
+
+import com.mini.findmeapp.MainActivity;
 
 import android.app.AlertDialog;
 import android.content.Context;
