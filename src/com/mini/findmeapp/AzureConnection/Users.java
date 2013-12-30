@@ -3,6 +3,10 @@ package com.mini.findmeapp.AzureConnection;
 //Klasa reprezentuj¹ca rekordy tabeli Users
 public class Users {
 	
+	public static final Integer MAX_GROUPS = 5;
+	public static final Integer MAX_EVENTS = 5;
+	
+	
 	//Identyfikator U¿ytkownika w bazie
 	public String Id;
 	
