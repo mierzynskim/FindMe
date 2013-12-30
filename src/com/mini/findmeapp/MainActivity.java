@@ -2,8 +2,13 @@ package com.mini.findmeapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
+import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
+import com.mini.findmeapp.AzureConnection.Groups;
+import com.mini.findmeapp.AzureConnection.Users;
 import com.mini.findmeapp.NavigationDrawer.AbstractNavDrawerActivity;
 import com.mini.findmeapp.NavigationDrawer.NavDrawerActivityConfiguration;
 import com.mini.findmeapp.NavigationDrawer.NavDrawerAdapter;
@@ -23,7 +28,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 
 		getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new GoogleMapFragment()).commit();
@@ -34,6 +39,41 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		
 		recieveIntent();
 		
+		//Testy DatabaseProxy
+//		DatabaseProxy db = new DatabaseProxy(this);
+//						
+//		db.addUser(mUserId, "albertwolant@gmail.com", new TableOperationCallback<Users>() 
+//				{			
+//			@Override
+//			public void onCompleted(Users arg0, Exception arg1,
+//					ServiceFilterResponse arg2) {
+//				if(arg1 == null)
+//				{
+//					Log.i("service", "xxx USER ADD OK");
+//				}
+//				else
+//					Log.i("service", "xxx USER ADD NIE OK " + arg1.getMessage());		
+//			}
+//		});
+		
+
+		
+//		db.addGroup("100000874404821", "Super grupa", "Ale fajna to grupa.", "qwerty123", true, new TableOperationCallback<Groups>() {
+//			@Override
+//			public void onCompleted(Groups arg0, Exception arg1,
+//					ServiceFilterResponse arg2) {
+//				if(arg1 == null)
+//				{
+//					Log.i("service", "xxx GROUP ADD OK");
+//					mGroupId = arg0.Id;
+//				}
+//				else
+//					Log.i("service", "xxx GROUP NIE ADD OK");
+//				
+//			}
+//
+//			
+//		});
 
 	}
 
