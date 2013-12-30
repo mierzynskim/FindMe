@@ -45,4 +45,10 @@ public class NavMenuSection implements NavDrawerItem {
     public boolean updateActionBarTitle() {
         return false;
     }
+
+	@Override
+	public String getSublabel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

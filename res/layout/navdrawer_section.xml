@@ -8,11 +8,10 @@
        android:layout_width="fill_parent"
        android:layout_height="wrap_content"
        android:text="Section"
-       android:textSize="18sp"
+       android:textAppearance="?android:attr/textAppearanceListItemSmall"
        android:paddingTop="7dp"
        android:paddingBottom="7dp"
-       android:textColor="#FFFFFF"
-       style="?android:attr/listSeparatorTextViewStyle"
-       />
+       android:textColor="#111"
+       style="?android:attr/listSeparatorTextViewStyle" />
 
 </RelativeLayout>

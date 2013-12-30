@@ -2,13 +2,8 @@ package com.mini.findmeapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
-import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
-import com.mini.findmeapp.AzureConnection.DatabaseProxy;
-import com.mini.findmeapp.AzureConnection.Users;
 import com.mini.findmeapp.NavigationDrawer.AbstractNavDrawerActivity;
 import com.mini.findmeapp.NavigationDrawer.NavDrawerActivityConfiguration;
 import com.mini.findmeapp.NavigationDrawer.NavDrawerAdapter;
@@ -63,13 +58,14 @@ public class MainActivity extends AbstractNavDrawerActivity {
 	protected NavDrawerActivityConfiguration getNavDrawerConfiguration() {
 
 		NavDrawerItem[] menu = new NavDrawerItem[] {
-				NavMenuSection.create( 100, "Groups"),
-				NavMenuItem.create(101,"Group 1", "navdrawer_friends", false, this),
-				NavMenuSection.create( 200, "Favourites"),
-				NavMenuItem.create(201,"Group 1", "navdrawer_friends", false, this),
-				NavMenuItem.create(202,"Group 2", "navdrawer_friends", false, this),
+				NavMenuSection.create( 100, "Group 1"),
+				NavMenuItem.create(101,"Event 1", "Group 1", "navdrawer_friends", true, this),
+				NavMenuItem.create(102,"Event 2","Group 1", "navdrawer_friends", true, this),
+				NavMenuSection.create( 200, "Group 2"),
+				NavMenuItem.create(201,"Event 1","Group 2", "navdrawer_friends", true, this),
+				NavMenuItem.create(202,"Event 2","Group 2", "navdrawer_friends", true, this),
 				NavMenuSection.create( 300, "Settings"),
-				NavMenuItem.create(301,"App Settings", "navdrawer_friends", false, this),
+				NavMenuItem.create(301,"App Settings", "", "ic_action_settings", false, this),
 		};
 		
 		NavDrawerItem[] menu2 = new NavDrawerItem[] {

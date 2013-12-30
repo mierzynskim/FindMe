@@ -25,6 +25,7 @@ public abstract class AbstractNavDrawerActivity extends FragmentActivity {
     
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
+    private CharSequence mSubtitle = "";
     
     private NavDrawerActivityConfiguration navConf ;
     
@@ -41,6 +42,8 @@ public abstract class AbstractNavDrawerActivity extends FragmentActivity {
         setContentView(navConf.getMainLayout()); 
         
         mTitle = mDrawerTitle = getTitle();
+        
+        mSubtitle = getActionBar().getSubtitle();
         
         mDrawerLayout = (DrawerLayout) findViewById(navConf.getDrawerLayoutId());
         mDrawerListLeft = (ListView) findViewById(navConf.getLeftDrawerId());
@@ -65,11 +68,13 @@ public abstract class AbstractNavDrawerActivity extends FragmentActivity {
                 ) {
             public void onDrawerClosed(View view) {
                 getActionBar().setTitle(mTitle);
+                getActionBar().setSubtitle(mSubtitle);
                 invalidateOptionsMenu();
             }
 
             public void onDrawerOpened(View drawerView) {
                 getActionBar().setTitle(mDrawerTitle);
+                getActionBar().setSubtitle(null);
                 invalidateOptionsMenu();
             }
         };
@@ -154,6 +159,7 @@ public abstract class AbstractNavDrawerActivity extends FragmentActivity {
         
         if ( selectedItem.updateActionBarTitle()) {
             setTitle(selectedItem.getLabel());
+            setSubtitle(selectedItem.getSublabel());
         }
         
         if ( this.mDrawerLayout.isDrawerOpen(this.mDrawerListLeft)) {
@@ -166,4 +172,11 @@ public abstract class AbstractNavDrawerActivity extends FragmentActivity {
         mTitle = title;
         getActionBar().setTitle(mTitle);
     }
+    
+    public void setSubtitle(CharSequence subtitle) {
+        mSubtitle = subtitle;
+        getActionBar().setSubtitle(subtitle);
+    }
+    
+    
 }
