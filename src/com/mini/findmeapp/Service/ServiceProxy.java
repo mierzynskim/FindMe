@@ -1,6 +1,14 @@
 package com.mini.findmeapp.Service;
 
+import java.net.MalformedURLException;
+import java.util.List;
+
+import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
+import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
+import com.microsoft.windowsazure.mobileservices.TableQueryCallback;
 import com.mini.findmeapp.MainActivity;
+import com.mini.findmeapp.AzureConnection.Users;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -45,13 +53,37 @@ public class ServiceProxy {
 		else
 		{
 			//Wystartowanie serwisu
-			Intent intent = new Intent(mMainActivity,FindMeService.class );
-			intent.putExtra(UserIdTag, mUserId);
+			final Intent intent = new Intent(mMainActivity,FindMeService.class );
 			intent.putExtra(EventIdTag, mEventId);
 			intent.putExtra(GroupIdTag, mGroupId);
 			intent.putExtra(CaptionTag, mCaption);
+			
+			try {
+				MobileServiceClient mClient = new MobileServiceClient( "https://findmeservice.azure-mobile.net/", "OLKfbhinUWxodQYJemjqlykJWzpizN37", mMainActivity );
+				MobileServiceTable<Users> users = mClient.getTable(Users.class);
+				users.where().field("facebookId").eq(mUserId).select("Id").execute(new TableQueryCallback<Users>() {
+					
+					@Override
+					public void onCompleted(List<Users> arg0, int arg1, Exception arg2,
+							ServiceFilterResponse arg3) {
+						if(arg2 == null)
+						{
+							for(Users user : arg0)
+								intent.putExtra(UserIdTag, user.Id);
+							
+							mMainActivity.startService(intent);
+						}
+						
+					}
+				});
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
 				
-			mMainActivity.startService(intent);
+			
 		}
 		
 	}

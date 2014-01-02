@@ -1,5 +1,7 @@
 package com.mini.findmeapp;
 
+import java.util.List;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,8 +9,11 @@ import android.widget.Toast;
 
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
+import com.microsoft.windowsazure.mobileservices.TableQueryCallback;
+import com.mini.findmeapp.AzureConnection.DatabaseProxy;
 import com.mini.findmeapp.AzureConnection.Groups;
 import com.mini.findmeapp.AzureConnection.Users;
+import com.mini.findmeapp.AzureConnection.UsersGroups;
 import com.mini.findmeapp.NavigationDrawer.AbstractNavDrawerActivity;
 import com.mini.findmeapp.NavigationDrawer.NavDrawerActivityConfiguration;
 import com.mini.findmeapp.NavigationDrawer.NavDrawerAdapter;
@@ -20,7 +25,7 @@ import com.mini.findmeapp.Service.ServiceProxy;
 
 public class MainActivity extends AbstractNavDrawerActivity {
 
-	private String mUserId = "1";
+	private String mUserFacebookId = "1";
 	private String mEventId = "1";
 	private String mGroupId = "1";
 	private String mCaption = "opis na mapce";
@@ -33,16 +38,16 @@ public class MainActivity extends AbstractNavDrawerActivity {
 
 		getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new GoogleMapFragment()).commit();
 
-		//Wystartowanie serwisu
-		mServiceProxy = new ServiceProxy(this, mUserId, mEventId, mGroupId, mCaption);
-		mServiceProxy.StartService();
-		
 		recieveIntent();
 		
+		//Wystartowanie serwisu
+		mServiceProxy = new ServiceProxy(this, mUserFacebookId, mEventId, mGroupId, mCaption);
+		mServiceProxy.StartService();
+		
 		//Testy DatabaseProxy
-//		DatabaseProxy db = new DatabaseProxy(this);
-//						
-//		db.addUser(mUserId, "albertwolant@gmail.com", new TableOperationCallback<Users>() 
+		DatabaseProxy db = new DatabaseProxy(this);
+						
+//		db.addUser(mUserFacebookId, "albertwolant@gmail.com", new TableOperationCallback<Users>() 
 //				{			
 //			@Override
 //			public void onCompleted(Users arg0, Exception arg1,
@@ -58,7 +63,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		
 
 		
-//		db.addGroup("100000874404821", "Super grupa", "Ale fajna to grupa.", "qwerty123", true, new TableOperationCallback<Groups>() {
+//		db.addGroup(mUserFacebookId, "Super grupa druga", "Ale fajna to grupa. 2", "qwerty123", true, new TableOperationCallback<Groups>() {
 //			@Override
 //			public void onCompleted(Groups arg0, Exception arg1,
 //					ServiceFilterResponse arg2) {
@@ -74,15 +79,43 @@ public class MainActivity extends AbstractNavDrawerActivity {
 //
 //			
 //		});
-
+		
+//		db.addUserToGroup(mUserFacebookId, "7F651144-4FCC-419C-A41C-7C3949095D31" , "qwerty123", new TableOperationCallback<UsersGroups>() {
+//
+//			@Override
+//			public void onCompleted(UsersGroups arg0, Exception arg1,
+//					ServiceFilterResponse arg2) {
+//				// TODO Auto-generated method stub
+//				if(arg1 == null)
+//					Log.i("service", "User dodany do grupy");
+//				else
+//					Log.i("service", "User NIE dodany do grupy");				
+//			}
+//		});
+		
+		
+//	Uwaga: callback wywo³uje siê osobno dla ka¿dej grupy
+//		db.getUserGroups(mUserFacebookId, new TableQueryCallback<Groups>() {
+//			
+//			@Override
+//			public void onCompleted(List<Groups> arg0, int arg1, Exception arg2,
+//					ServiceFilterResponse arg3) {
+//				if(arg2 == null)
+//				{
+//					Groups group  = arg0.get(0);
+//					Log.i("service", group.Id + " " + group.name + " " + group.description);
+//				}
+//				
+//			}
+//		});
 	}
 
 	private void recieveIntent()
 	{
 		Intent intent = getIntent();
 
-		mUserId = intent.getStringExtra(LoginActivity.USER_ID);
-		Toast.makeText(this, mUserId, Toast.LENGTH_LONG).show();
+		mUserFacebookId = intent.getStringExtra(LoginActivity.USER_ID);
+		Toast.makeText(this, mUserFacebookId, Toast.LENGTH_LONG).show();
 	}
 
 

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.MobileServiceQuery;
 import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
@@ -69,6 +70,7 @@ public class DatabaseProxy {
 	}
 
 	
+	//Metoda dodaje grupê do bazy danych
 	public void addGroup(String userFacebookId, final String name, final String description, final String password, final Boolean isPrivate, final TableOperationCallback<Groups> onGroupAdd)
 	{
 		final MobileServiceTable<Users> usersTable = mClient.getTable(Users.class);
@@ -102,4 +104,95 @@ public class DatabaseProxy {
 			}
 		});
 	}
+
+	//Metoda dodaje u¿ytkownika o podanym facebookId do grupy
+	public void addUserToGroup(final String userFacebookId, final String groupId, final String password, final TableOperationCallback<UsersGroups> onInsertCallback)
+	{
+			final MobileServiceTable<Users> usersTable = mClient.getTable(Users.class);
+		
+			usersTable.where().field("facebookId").eq(userFacebookId).execute(new TableQueryCallback<Users>() 
+			{
+				@Override
+				public void onCompleted(List<Users> result, int count, Exception exception,ServiceFilterResponse filter) 
+				{
+					
+					if(exception == null )
+					{
+						for(final Users user : result)
+						{
+							final MobileServiceTable<Groups> groups = mClient.getTable(Groups.class);
+							
+							groups.where().field("Id").eq(groupId).select("password", "isPrivate", "Id").execute(new TableQueryCallback<Groups>() 
+							{
+								
+								@Override
+								public void onCompleted(List<Groups> arg0, int arg1, Exception arg2,
+										ServiceFilterResponse arg3) 
+								{
+									if(arg2 == null)
+									{
+										for(Groups group : arg0)
+										{
+											if((group.isPrivate && group.password.equals(password)) || !group.isPrivate)
+											{
+												UsersGroups usersgroups = new UsersGroups();
+												usersgroups.groupId = group.Id;
+												usersgroups.userId = user.Id;
+												
+												MobileServiceTable<UsersGroups> usersGroups = mClient.getTable(UsersGroups.class);
+												
+												usersGroups.insert(usersgroups, onInsertCallback);
+											}
+										}
+									}
+								}
+							});
+						}
+					}
+				}
+			});
+	}
+
+	//Metoda zwraca wszystkie grupy do których nale¿y u¿ytkownik o podanym facebookId
+	//Wywo³uje metodê callback dla ka¿dej znalezionej grupy
+	public void getUserGroups(final String userFacebookId, final TableQueryCallback<Groups> callback)
+	{
+		MobileServiceTable<Users> users = mClient.getTable(Users.class);
+		
+		users.where().field("facebookId").eq(userFacebookId).select("Id").execute(new TableQueryCallback<Users>() {
+			
+			@Override
+			public void onCompleted(List<Users> arg0, int arg1, Exception arg2,
+					ServiceFilterResponse arg3) {
+				if( arg2 == null)
+				{
+					for(Users user : arg0)
+					{
+						MobileServiceTable<UsersGroups> usersGroups = mClient.getTable(UsersGroups.class);
+						final MobileServiceTable<Groups> groupsInAzure = mClient.getTable(Groups.class);
+						
+						usersGroups.where().field("userId").eq(user.Id).select("groupId").execute(new TableQueryCallback<UsersGroups>() {
+							
+							@Override
+							public void onCompleted(List<UsersGroups> arg0, int arg1, Exception arg2,
+									ServiceFilterResponse arg3) {
+								if(arg2 == null)
+								{
+									for(UsersGroups item : arg0)
+									{
+										groupsInAzure.where().field("Id").eq(item.groupId).execute(callback);
+									}
+								}
+							}
+						});
+					}
+					
+				}
+				
+			}
+		});
+		
+		
+	}
+	
 }

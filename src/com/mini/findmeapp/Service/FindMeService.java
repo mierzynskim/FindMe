@@ -62,7 +62,7 @@ public class FindMeService extends Service
                 addUsersLocation();
                 
                 //Wystartowanie timera
-                Log.i("service", "xxx Service Started");
+                Log.i("service", "xxx Service Started"+userId);
                 mTimer.scheduleAtFixedRate(new TimerTask(){public void run(){onTimerTick();}}, 0, 5000L);
                 
         };
