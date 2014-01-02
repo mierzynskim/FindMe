@@ -11,8 +11,7 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:src="@drawable/ic_action_new_event" />
+        android:layout_marginRight="12dp" />
     
     <TextView
         android:id="@+id/navmenuitem_label"

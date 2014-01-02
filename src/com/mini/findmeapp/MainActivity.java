@@ -10,9 +10,11 @@ import android.widget.Toast;
 
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
+
 import com.microsoft.windowsazure.mobileservices.TableQueryCallback;
 import com.mini.findmeapp.AzureConnection.DatabaseProxy;
 import com.mini.findmeapp.AzureConnection.Events;
+
 import com.mini.findmeapp.AzureConnection.Groups;
 import com.mini.findmeapp.AzureConnection.GroupsEvents;
 import com.mini.findmeapp.AzureConnection.Users;
@@ -32,10 +34,13 @@ public class MainActivity extends AbstractNavDrawerActivity {
 	private String mUserFacebookId = "1";
 	private String mCaption = "opis na mapce";
 	private ServiceProxy mServiceProxy;
+	
+	private NavDrawerActivityConfiguration navDrawerActivityConfiguration;
 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
+		initMenu();
 		super.onCreate(savedInstanceState);
 
 		getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new GoogleMapFragment()).commit();
@@ -46,6 +51,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		mServiceProxy = new ServiceProxy(this, mUserFacebookId, "6ED74A78-0B5E-4C1E-9ED6-0220B6724562", "9CDE2757-E243-4055-B0BB-6E9EA63A4A5B", mCaption);
 		mServiceProxy.StartService();
 		
+
 		//Testy DatabaseProxy
 		DatabaseProxy db = new DatabaseProxy(this);
 						
@@ -62,8 +68,9 @@ public class MainActivity extends AbstractNavDrawerActivity {
 //					Log.i("service", "xxx USER ADD NIE OK " + arg1.getMessage());		
 //			}
 //		});
+
 		
-		
+
 //		db.addGroup(mUserFacebookId, "Super grupa druga", "Ale fajna to grupa. 2", "qwerty123", true, new TableOperationCallback<Groups>() {
 //			@Override
 //			public void onCompleted(Groups arg0, Exception arg1,
@@ -131,46 +138,6 @@ public class MainActivity extends AbstractNavDrawerActivity {
 //					}
 //				});
 
-//	Uwaga: callback jest wywo³ywany osobno dla ka¿dego eventu
-//		db.getAllEvents("9CDE2757-E243-4055-B0BB-6E9EA63A4A5B", new TableQueryCallback<Events>() {
-//			
-//			@Override
-//			public void onCompleted(List<Events> arg0, int arg1, Exception arg2,
-//					ServiceFilterResponse arg3) {
-//				if(arg2 == null)
-//				{
-//					Events event = arg0.get(0);
-//					Log.i("service","Wczytano event " + event.name);
-//				}
-//					
-//				
-//			}
-//		});
-		
-//		db.getPublicGroups(new TableQueryCallback<Groups>() {
-//			
-//			@Override
-//			public void onCompleted(List<Groups> arg0, int arg1, Exception arg2,
-//					ServiceFilterResponse arg3) {
-//				if(arg2 == null)
-//					for(Groups group : arg0)
-//						Log.i("service", group.name);
-//				
-//			}
-//		});
-		
-		
-//		db.getUsersLocations("9CDE2757-E243-4055-B0BB-6E9EA63A4A5B", "6ED74A78-0B5E-4C1E-9ED6-0220B6724562", new TableQueryCallback<UsersLocations>() {
-//			
-//			@Override
-//			public void onCompleted(List<UsersLocations> arg0, int arg1,
-//					Exception arg2, ServiceFilterResponse arg3) {
-//				if(arg2 == null)
-//					for(UsersLocations item : arg0)
-//						Log.i("service", item.caption + " " + item.userLatitude + " " + item.userLongitude);
-//				
-//			}
-//		});
 		
 	}
 
@@ -193,14 +160,44 @@ public class MainActivity extends AbstractNavDrawerActivity {
 
 	@Override
 	protected NavDrawerActivityConfiguration getNavDrawerConfiguration() {
+		return navDrawerActivityConfiguration;
+	}
+	
+	
 
+	@Override
+	protected void onNavItemSelected(int id) {
+		switch ((int)id) {
+		case 101:
+//			NavDrawerItem[] menu = new NavDrawerItem[] {
+//					NavMenuSection.create( 100, "Group 1"),
+//					NavMenuItem.create(101,"Event 1", "Group 1", "ic_action_new_event", true, this),
+//					NavMenuItem.create(102,"Event 2","Group 1", "ic_action_new_event", true, this),
+//					NavMenuSection.create( 300, "Settings"),
+//					NavMenuItem.create(301,"App Settings", "", "ic_action_settings", false, this),
+//			};
+//			
+//			addGroup(menu, null);
+			Intent intentGroup = new Intent(MainActivity.this, AddEventActivity.class);
+			startActivity(intentGroup);
+			break;
+		case 301:
+			Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+			startActivity(intent);
+			break;
+		}
+
+	};
+	
+	private void initMenu() {
 		NavDrawerItem[] menu = new NavDrawerItem[] {
 				NavMenuSection.create( 100, "Group 1"),
-				NavMenuItem.create(101,"Event 1", "Group 1", "navdrawer_friends", true, this),
-				NavMenuItem.create(102,"Event 2","Group 1", "navdrawer_friends", true, this),
+				NavMenuItem.create(101,"Add event", "", "ic_action_add_group", false, this),
+				NavMenuItem.create(102,"Event 1", "Group 1", "ic_action_new_event", true, this),
+				NavMenuItem.create(103,"Event 2","Group 1", "ic_action_new_event", true, this),
 				NavMenuSection.create( 200, "Group 2"),
-				NavMenuItem.create(201,"Event 1","Group 2", "navdrawer_friends", true, this),
-				NavMenuItem.create(202,"Event 2","Group 2", "navdrawer_friends", true, this),
+				NavMenuItem.create(201,"Event 1","Group 2", "ic_action_new_event", true, this),
+				NavMenuItem.create(202,"Event 2","Group 2", "ic_action_new_event", true, this),
 				NavMenuSection.create( 300, "Settings"),
 				NavMenuItem.create(301,"App Settings", "", "ic_action_settings", false, this),
 		};
@@ -210,13 +207,13 @@ public class MainActivity extends AbstractNavDrawerActivity {
 
 		};
 
-		NavDrawerActivityConfiguration navDrawerActivityConfiguration = new NavDrawerActivityConfiguration();
+		navDrawerActivityConfiguration = new NavDrawerActivityConfiguration();
 		navDrawerActivityConfiguration.setMainLayout(R.layout.activity_main);
 		navDrawerActivityConfiguration.setDrawerLayoutId(R.id.drawer_layout);
 		navDrawerActivityConfiguration.setLeftDrawerId(R.id.left_drawer);
 		navDrawerActivityConfiguration.setRightDrawerId(R.id.right_drawer);
 		navDrawerActivityConfiguration.setNavItemsLeft(menu);
-		navDrawerActivityConfiguration.setNavItemsRight(menu);
+		navDrawerActivityConfiguration.setNavItemsRight(menu2);
 		navDrawerActivityConfiguration.setDrawerShadow(R.drawable.drawer_shadow);
 		navDrawerActivityConfiguration.setDrawerOpenDesc(R.string.drawer_open);
 		navDrawerActivityConfiguration.setDrawerCloseDesc(R.string.drawer_close);
@@ -224,20 +221,5 @@ public class MainActivity extends AbstractNavDrawerActivity {
 				new NavDrawerAdapter(this, R.layout.navdrawer_item, menu ));
 		navDrawerActivityConfiguration.setBaseAdapterRight(
 				new NavDrawerAdapter(this, R.layout.navdrawer_item, menu2 ));
-		return navDrawerActivityConfiguration;
 	}
-
-	@Override
-	protected void onNavItemSelected(int id) {
-		switch ((int)id) {
-		case 301:
-			Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-			startActivity(intent);
-			break;
-		}
-
-	};
-
-
-
 }

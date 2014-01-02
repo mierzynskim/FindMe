@@ -36,7 +36,6 @@ public abstract class AbstractNavDrawerActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
         navConf = getNavDrawerConfiguration();
         
         setContentView(navConf.getMainLayout()); 
@@ -44,11 +43,18 @@ public abstract class AbstractNavDrawerActivity extends FragmentActivity {
         mTitle = mDrawerTitle = getTitle();
         
         mSubtitle = getActionBar().getSubtitle();
+        refreshDrawer();
+    }
+    
+    protected void refreshDrawer() {
+        navConf = getNavDrawerConfiguration();
+        
         
         mDrawerLayout = (DrawerLayout) findViewById(navConf.getDrawerLayoutId());
         mDrawerListLeft = (ListView) findViewById(navConf.getLeftDrawerId());
         mDrawerListLeft.setAdapter(navConf.getBaseAdapterLeft());
         mDrawerListLeft.setOnItemClickListener(new DrawerItemClickListener());
+        
         
         mDrawerListRight = (ListView) findViewById(navConf.getRightDrawerId());
         mDrawerListRight.setAdapter(navConf.getBaseAdapterRight());
@@ -177,6 +183,23 @@ public abstract class AbstractNavDrawerActivity extends FragmentActivity {
         mSubtitle = subtitle;
         getActionBar().setSubtitle(subtitle);
     }
+    
+	protected void addGroup(NavDrawerItem[] leftMenu, NavDrawerItem[] rightMenu) {
+		
+		if (leftMenu != null) {
+		navConf.setNavItemsLeft(leftMenu);
+		navConf.setBaseAdapterLeft(
+				new NavDrawerAdapter(this, R.layout.navdrawer_item, leftMenu ));
+		}
+		if (rightMenu != null) {
+		navConf.setNavItemsRight(rightMenu);
+		navConf.setBaseAdapterRight(
+				new NavDrawerAdapter(this, R.layout.navdrawer_item, rightMenu ));
+		}
+		refreshDrawer();
+	}
+    
+    
     
     
 }

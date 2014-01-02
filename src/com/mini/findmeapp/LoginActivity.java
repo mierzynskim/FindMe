@@ -16,8 +16,8 @@ import com.facebook.model.GraphUser;
 public class LoginActivity extends FragmentActivity {
 
     public static String USER_ID;
-
     private UiLifecycleHelper uiHelper;
+	protected GraphUser user;
 
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
@@ -51,7 +51,7 @@ public class LoginActivity extends FragmentActivity {
         }   
 	}
 
-	protected GraphUser user;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
