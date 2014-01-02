@@ -1,5 +1,6 @@
 package com.mini.findmeapp;
 
+import java.sql.Date;
 import java.util.List;
 
 import android.content.Intent;
@@ -11,7 +12,9 @@ import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 import com.microsoft.windowsazure.mobileservices.TableQueryCallback;
 import com.mini.findmeapp.AzureConnection.DatabaseProxy;
+import com.mini.findmeapp.AzureConnection.Events;
 import com.mini.findmeapp.AzureConnection.Groups;
+import com.mini.findmeapp.AzureConnection.GroupsEvents;
 import com.mini.findmeapp.AzureConnection.Users;
 import com.mini.findmeapp.AzureConnection.UsersGroups;
 import com.mini.findmeapp.NavigationDrawer.AbstractNavDrawerActivity;
@@ -21,6 +24,7 @@ import com.mini.findmeapp.NavigationDrawer.NavDrawerItem;
 import com.mini.findmeapp.NavigationDrawer.NavMenuItem;
 import com.mini.findmeapp.NavigationDrawer.NavMenuSection;
 import com.mini.findmeapp.Service.ServiceProxy;
+import com.mini.findmeapp.Service.UsersLocations;
 
 
 public class MainActivity extends AbstractNavDrawerActivity {
@@ -41,7 +45,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		recieveIntent();
 		
 		//Wystartowanie serwisu
-		mServiceProxy = new ServiceProxy(this, mUserFacebookId, mEventId, mGroupId, mCaption);
+		mServiceProxy = new ServiceProxy(this, mUserFacebookId, "6ED74A78-0B5E-4C1E-9ED6-0220B6724562", "9CDE2757-E243-4055-B0BB-6E9EA63A4A5B", mCaption);
 		mServiceProxy.StartService();
 		
 		//Testy DatabaseProxy
@@ -61,7 +65,6 @@ public class MainActivity extends AbstractNavDrawerActivity {
 //			}
 //		});
 		
-
 		
 //		db.addGroup(mUserFacebookId, "Super grupa druga", "Ale fajna to grupa. 2", "qwerty123", true, new TableOperationCallback<Groups>() {
 //			@Override
@@ -74,13 +77,10 @@ public class MainActivity extends AbstractNavDrawerActivity {
 //				}
 //				else
 //					Log.i("service", "xxx GROUP NIE ADD OK");
-//				
 //			}
-//
-//			
 //		});
 		
-//		db.addUserToGroup(mUserFacebookId, "7F651144-4FCC-419C-A41C-7C3949095D31" , "qwerty123", new TableOperationCallback<UsersGroups>() {
+//		db.addUserToGroup(mUserFacebookId, "CADE01A9-B3D8-4BFA-9600-B11D8515D8B6" , null, new TableOperationCallback<UsersGroups>() {
 //
 //			@Override
 //			public void onCompleted(UsersGroups arg0, Exception arg1,
@@ -108,6 +108,60 @@ public class MainActivity extends AbstractNavDrawerActivity {
 //				
 //			}
 //		});
+		
+//		db.addEvent("9CDE2757-E243-4055-B0BB-6E9EA63A4A5B", "Super event", "Opis eventu", 52.01, 28.006, "www.mini.pw.edu.pl",
+//				new java.util.Date(2014,1,2), new java.util.Date(2014,3,4), new TableOperationCallback<GroupsEvents>() {
+//					
+//					@Override
+//					public void onCompleted(GroupsEvents arg0, Exception arg1,
+//							ServiceFilterResponse arg2) {
+//						if(arg1 == null)
+//							Log.i("service", "Dodano Event o ID " + arg0.eventId);
+//						
+//					}
+//				});
+
+//	Uwaga: callback jest wywo³ywany osobno dla ka¿dego eventu
+//		db.getAllEvents("9CDE2757-E243-4055-B0BB-6E9EA63A4A5B", new TableQueryCallback<Events>() {
+//			
+//			@Override
+//			public void onCompleted(List<Events> arg0, int arg1, Exception arg2,
+//					ServiceFilterResponse arg3) {
+//				if(arg2 == null)
+//				{
+//					Events event = arg0.get(0);
+//					Log.i("service","Wczytano event " + event.name);
+//				}
+//					
+//				
+//			}
+//		});
+		
+//		db.getPublicGroups(new TableQueryCallback<Groups>() {
+//			
+//			@Override
+//			public void onCompleted(List<Groups> arg0, int arg1, Exception arg2,
+//					ServiceFilterResponse arg3) {
+//				if(arg2 == null)
+//					for(Groups group : arg0)
+//						Log.i("service", group.name);
+//				
+//			}
+//		});
+		
+		
+//		db.getUsersLocations("9CDE2757-E243-4055-B0BB-6E9EA63A4A5B", "6ED74A78-0B5E-4C1E-9ED6-0220B6724562", new TableQueryCallback<UsersLocations>() {
+//			
+//			@Override
+//			public void onCompleted(List<UsersLocations> arg0, int arg1,
+//					Exception arg2, ServiceFilterResponse arg3) {
+//				if(arg2 == null)
+//					for(UsersLocations item : arg0)
+//						Log.i("service", item.caption + " " + item.userLatitude + " " + item.userLongitude);
+//				
+//			}
+//		});
+		
 	}
 
 	private void recieveIntent()

@@ -1,10 +1,15 @@
 package com.mini.findmeapp.AzureConnection;
 
 import java.net.MalformedURLException;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import android.content.Context;
 import android.util.Log;
+import android.util.Pair;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceQuery;
@@ -12,6 +17,7 @@ import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 import com.microsoft.windowsazure.mobileservices.TableQueryCallback;
+import com.mini.findmeapp.Service.UsersLocations;
 
 //Klasa reperzentuje proxy dla operacji na bazie danych, w obecnej wersji przez Azure Mobile Services
 public class DatabaseProxy {
@@ -105,6 +111,15 @@ public class DatabaseProxy {
 		});
 	}
 
+	//Metoda zwraca grupy publiczne
+	public void getPublicGroups(TableQueryCallback<Groups> callback)
+	{
+		MobileServiceTable<Groups> groups = mClient.getTable(Groups.class);
+		
+		groups.where().field("isPrivate").eq(false).select("Id", "name", "description").execute(callback);
+		
+	}
+	
 	//Metoda dodaje u¿ytkownika o podanym facebookId do grupy
 	public void addUserToGroup(final String userFacebookId, final String groupId, final String password, final TableOperationCallback<UsersGroups> onInsertCallback)
 	{
@@ -158,7 +173,6 @@ public class DatabaseProxy {
 	public void getUserGroups(final String userFacebookId, final TableQueryCallback<Groups> callback)
 	{
 		MobileServiceTable<Users> users = mClient.getTable(Users.class);
-		
 		users.where().field("facebookId").eq(userFacebookId).select("Id").execute(new TableQueryCallback<Users>() {
 			
 			@Override
@@ -193,6 +207,72 @@ public class DatabaseProxy {
 		});
 		
 		
+	}
+	
+	//Metoda dodaje Event do grupy, zak³ada, ¿e jeœli user ma groupId to jest jej cz³onkiem i groupId jest poprawne ( prawdopodobnie
+	// pochodzi z metody getUserGroups lub getPublicGroups )
+	public void addEvent(final String groupId, String eventName, String eventDescription, double latitude, double longitude, 
+			String eventUrl, Date start, Date end,final TableOperationCallback<GroupsEvents> callback)
+	{
+		final MobileServiceTable<GroupsEvents> groupsEvents = mClient.getTable(GroupsEvents.class);
+		MobileServiceTable<Events> events = mClient.getTable(Events.class);
+		
+		Events event = new Events();
+		event.name = eventName;
+		event.description = eventDescription;
+		event.url = eventUrl;
+		event.locationLatitude = latitude;
+		event.locationLongitude = longitude;
+		event.startDate = start;
+		event.endDate = end;
+		
+		events.insert(event, new TableOperationCallback<Events>() {
+			
+			@Override
+			public void onCompleted(Events arg0, Exception arg1,
+					ServiceFilterResponse arg2) {
+				if(arg1 == null)
+				{
+					GroupsEvents item = new GroupsEvents();
+					item.eventId = arg0.Id;
+					item.groupId = groupId;
+					groupsEvents.insert(item, callback);
+				}
+			}
+		});
+		
+		
+	}
+
+	//Metoda zwraca wszystkie Eventy dla grupy o podanym groupId
+	//Wywo³uje metodê callback dla ka¿dego znalezionego eventu
+	public void getAllEvents(final String groupId, final TableQueryCallback<Events> callback)
+	{
+		MobileServiceTable<GroupsEvents> groupsEvents = mClient.getTable(GroupsEvents.class);
+	    final MobileServiceTable<Events> events = mClient.getTable(Events.class);
+	    
+	    groupsEvents.where().field("groupId").eq(groupId).select("eventId").execute(new TableQueryCallback<GroupsEvents>() {
+			
+			@Override
+			public void onCompleted(List<GroupsEvents> arg0, int arg1, Exception arg2,
+					ServiceFilterResponse arg3) {
+				if(arg2 == null)
+					for(GroupsEvents item : arg0)
+					{
+						Log.i("service", item.eventId);
+						events.where().field("Id").eq(item.eventId).select("Id", "name", "description", "url", "locationLatitude", "locationLongitude", "startDate", "endDate").execute(callback);
+						
+					}
+				
+			}
+		});
+	}
+
+	//Metoda zwraca Lokalizacjê wszystkich u¿ytkowników uczestnicz¹cych w podanym Evencie i w podanej grupie
+	public void getUsersLocations(String groupId, String eventId, TableQueryCallback<UsersLocations> callback)
+	{
+		MobileServiceTable<UsersLocations> usersLocations = mClient.getTable(UsersLocations.class);
+		usersLocations.where().field("groupId").eq(groupId).and().field("eventId").eq(eventId).select("caption", "userLatitude", "userLongitude").execute(callback);
 	}
 	
 }

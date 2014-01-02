@@ -1,6 +1,8 @@
 package com.mini.findmeapp.AzureConnection;
 
-import java.sql.Date;
+import java.util.Date;
+
+
 
 //Klasa reprezentuj¹ca eventy
 public class Events {
