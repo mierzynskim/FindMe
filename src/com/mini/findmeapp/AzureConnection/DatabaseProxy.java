@@ -120,6 +120,13 @@ public class DatabaseProxy {
 		
 	}
 	
+	//Metoda zwraca grupê po nazwie
+	public void getGroupByName(String groupName, TableQueryCallback<Groups> callback)
+	{
+		MobileServiceTable<Groups> groups = mClient.getTable(Groups.class);
+		groups.where().field("name").eq(groupName).select("name", "Id", "description").execute(callback);
+	}
+	
 	//Metoda dodaje u¿ytkownika o podanym facebookId do grupy
 	public void addUserToGroup(final String userFacebookId, final String groupId, final String password, final TableOperationCallback<UsersGroups> onInsertCallback)
 	{

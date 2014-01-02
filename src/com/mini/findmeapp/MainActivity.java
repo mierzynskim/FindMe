@@ -30,8 +30,6 @@ import com.mini.findmeapp.Service.UsersLocations;
 public class MainActivity extends AbstractNavDrawerActivity {
 
 	private String mUserFacebookId = "1";
-	private String mEventId = "1";
-	private String mGroupId = "1";
 	private String mCaption = "opis na mapce";
 	private ServiceProxy mServiceProxy;
 
@@ -105,6 +103,18 @@ public class MainActivity extends AbstractNavDrawerActivity {
 //					Groups group  = arg0.get(0);
 //					Log.i("service", group.Id + " " + group.name + " " + group.description);
 //				}
+//				
+//			}
+//		});
+		
+//		db.getGroupByName("Super grupa", new TableQueryCallback<Groups>() {
+//			
+//			@Override
+//			public void onCompleted(List<Groups> arg0, int arg1, Exception arg2,
+//					ServiceFilterResponse arg3) {
+//				if(arg2 == null)
+//					for(Groups group : arg0)
+//						Log.i("service", group.Id + " " + group.name + " " + group.description);
 //				
 //			}
 //		});
