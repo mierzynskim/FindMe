@@ -1,9 +1,10 @@
 package com.mini.findmeapp;
 
-import java.io.Serializable;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.TimePickerDialog.OnTimeSetListener;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
@@ -14,73 +15,148 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TimePicker;
+
+import com.mini.findmeapp.AzureConnection.DatabaseProxy;
+import com.mini.findmeapp.AzureConnection.Events;
 
 public class AddEventActivity extends FragmentActivity {
+	
+	private DatabaseProxy databaseProxy;
+	private Events event = new Events();
+	
+	public enum ACTIVE_DIALOG {
+	    START_DATE, END_DATE, START_TIME, END_TIME
+	}
+	
+	public ACTIVE_DIALOG activeDialog;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_event);
-		// Show the Up button in the action bar.
+		databaseProxy = new DatabaseProxy(this);
+		
 		setupActionBar();
 		findViewById(R.id.startDate).setOnTouchListener(new OnTouchListener() {
-		    @Override
-		    public boolean onTouch(View v, MotionEvent event) {
-		        if (event.getAction() == MotionEvent.ACTION_UP) {
-		        	showDatePicker();
-		        }
-		        return false;
-		    }
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_UP) {
+					activeDialog = ACTIVE_DIALOG.START_DATE;
+					showDatePicker();
+				}
+				return false;
+			}
 		});
 		findViewById(R.id.endDate).setOnTouchListener(new OnTouchListener() {
-		    @Override
-		    public boolean onTouch(View v, MotionEvent event) {
-		        if (event.getAction() == MotionEvent.ACTION_UP) {
-		        	showDatePicker();
-		        }
-		        return false;
-		    }
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_UP) {
+					activeDialog = ACTIVE_DIALOG.END_DATE;
+					showDatePicker();
+				}
+				return false;
+			}
+		});
+		findViewById(R.id.startHour).setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_UP) {
+					activeDialog = ACTIVE_DIALOG.START_TIME;
+					showTimePicker();
+				}
+				return false;
+			}
+		});
+		findViewById(R.id.endHour).setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_UP) {
+					activeDialog = ACTIVE_DIALOG.END_TIME;
+					showTimePicker();
+				}
+				return false;
+			}
 		});
 	}
 
-	/**
-	 * Set up the {@link android.app.ActionBar}.
-	 */
 	private void setupActionBar() {
-
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 	}
+
+	private void showDatePicker() {
+		DatePickerFragment date = new DatePickerFragment();
+		Calendar calender = Calendar.getInstance();
+		Bundle args = new Bundle();
+		args.putInt("year", calender.get(Calendar.YEAR));
+		args.putInt("month", calender.get(Calendar.MONTH));
+		args.putInt("day", calender.get(Calendar.DAY_OF_MONTH));
+		date.setArguments(args);
+
+		date.setCallBack(ondate);
+		date.show(getSupportFragmentManager(), "Date Picker");
+	}
 	
-	 private void showDatePicker() {
-		  DatePickerFragment date = new DatePickerFragment();
-		  Calendar calender = Calendar.getInstance();
-		  Bundle args = new Bundle();
-		  args.putInt("year", calender.get(Calendar.YEAR));
-		  args.putInt("month", calender.get(Calendar.MONTH));
-		  args.putInt("day", calender.get(Calendar.DAY_OF_MONTH));
-		  date.setArguments(args);
+	private void showTimePicker() {
+		TimePickerFragment date = new TimePickerFragment();
+		Calendar calender = Calendar.getInstance();
+		Bundle args = new Bundle();
+		args.putInt("hour", calender.get(Calendar.HOUR_OF_DAY));
+		args.putInt("minute", calender.get(Calendar.MINUTE));
+		date.setArguments(args);
 
-		  date.setCallBack(ondate);
-		  date.show(getSupportFragmentManager(), "Date Picker");
-		 }
+		date.setCallBack(onTime);
+		date.show(getSupportFragmentManager(), "Time Picker");
+	}
 
-		 OnDateSetListener ondate = new OnDateSetListener() {
-		  @Override
-		  public void onDateSet(DatePicker view, int year, int monthOfYear,
-		    int dayOfMonth) {
-		   Toast.makeText(
-		     AddEventActivity.this,
-		     String.valueOf(year) + "-" + String.valueOf(monthOfYear)
-		       + "-" + String.valueOf(dayOfMonth),
-		     Toast.LENGTH_LONG).show();
-		  }
-		 };
+	OnDateSetListener ondate = new OnDateSetListener() {
+		@Override
+		public void onDateSet(DatePicker view, int year, int monthOfYear,
+				int dayOfMonth) {
+			Calendar date = new  GregorianCalendar(year, monthOfYear, dayOfMonth);
+			if (activeDialog == ACTIVE_DIALOG.START_DATE) {
+				EditText startDateText = (EditText)findViewById(R.id.startDate);
+				startDateText.setText(composeDateString(date));
+				event.startDate = date.getTime();
+			}
+			else {
+				EditText endEditText = (EditText)findViewById(R.id.endDate);
+				endEditText.setText(composeDateString(date));
+				event.endDate = date.getTime();
+				
+			}
+		}
+	};
+	
+	OnTimeSetListener onTime = new OnTimeSetListener() {
+		
+		@Override
+		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+			if (activeDialog == ACTIVE_DIALOG.START_TIME) {
+				EditText startDateText = (EditText)findViewById(R.id.startHour);
+				startDateText.setText(hourOfDay + ":" + minute);
+			}
+			else {
+				EditText endEditText = (EditText)findViewById(R.id.endHour);
+				endEditText.setText(hourOfDay + ":" + minute);
+			}
+			
+		}
+	};
+
+	
+	private String composeDateString(Calendar date) {
+		return new StringBuilder()
+        .append(date.get(Calendar.MONTH) + 1).append("-")
+        .append(date.get(Calendar.DAY_OF_MONTH)).append("-")
+        .append(date.get(Calendar.YEAR)).append(" ").toString();
+	}
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.add_group, menu);
 		return true;
 	}
@@ -89,13 +165,6 @@ public class AddEventActivity extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure. For
-			// more details, see the Navigation pattern on Android Design:
-			//
-			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-			//
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		}

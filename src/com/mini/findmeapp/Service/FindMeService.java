@@ -85,7 +85,6 @@ public class FindMeService extends Service
 		        }
         	});
         	
-        	
 		}
 
         //Usunięcie informacji o lokalizacji użytkownika z bazy dancych
