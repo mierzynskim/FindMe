@@ -5,6 +5,7 @@ import java.util.GregorianCalendar;
 
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog.OnTimeSetListener;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
@@ -43,6 +45,8 @@ public class AddEventActivity extends FragmentActivity {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_UP) {
+					InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+					mgr.hideSoftInputFromWindow(v.getWindowToken(), 0);
 					activeDialog = ACTIVE_DIALOG.START_DATE;
 					showDatePicker();
 				}
@@ -53,6 +57,8 @@ public class AddEventActivity extends FragmentActivity {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_UP) {
+					InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+					mgr.hideSoftInputFromWindow(v.getWindowToken(), 0);
 					activeDialog = ACTIVE_DIALOG.END_DATE;
 					showDatePicker();
 				}
@@ -63,6 +69,8 @@ public class AddEventActivity extends FragmentActivity {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_UP) {
+					InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+					mgr.hideSoftInputFromWindow(v.getWindowToken(), 0);
 					activeDialog = ACTIVE_DIALOG.START_TIME;
 					showTimePicker();
 				}
@@ -73,6 +81,8 @@ public class AddEventActivity extends FragmentActivity {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_UP) {
+					InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+					mgr.hideSoftInputFromWindow(v.getWindowToken(), 0);
 					activeDialog = ACTIVE_DIALOG.END_TIME;
 					showTimePicker();
 				}

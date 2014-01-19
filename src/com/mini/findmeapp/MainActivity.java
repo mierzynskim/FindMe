@@ -31,7 +31,6 @@ import com.mini.findmeapp.Service.UsersLocations;
 
 public class MainActivity extends AbstractNavDrawerActivity {
 
-	private String mUserFacebookId = "1";
 	private String mCaption = "opis na mapce";
 	private ServiceProxy mServiceProxy;
 	
@@ -45,10 +44,9 @@ public class MainActivity extends AbstractNavDrawerActivity {
 
 		getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new GoogleMapFragment()).commit();
 
-		recieveIntent();
 		
 		//Wystartowanie serwisu
-		mServiceProxy = new ServiceProxy(this, mUserFacebookId, "6ED74A78-0B5E-4C1E-9ED6-0220B6724562", "9CDE2757-E243-4055-B0BB-6E9EA63A4A5B", mCaption);
+		mServiceProxy = new ServiceProxy(this, LoginActivity.user.getId(), "6ED74A78-0B5E-4C1E-9ED6-0220B6724562", "9CDE2757-E243-4055-B0BB-6E9EA63A4A5B", mCaption);
 		mServiceProxy.StartService();
 		
 
@@ -141,15 +139,6 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		
 	}
 
-	private void recieveIntent()
-	{
-		Intent intent = getIntent();
-
-		mUserFacebookId = intent.getStringExtra(LoginActivity.USER_ID);
-		Toast.makeText(this, mUserFacebookId, Toast.LENGTH_LONG).show();
-	}
-
-
 	//Przy zniszczeniu aplikacji dodatkowo zatrzymujemy serwis
 	@Override
 	protected void onDestroy()
@@ -204,7 +193,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		
 		NavDrawerItem[] menu2 = new NavDrawerItem[] {
 				NavMenuSection.create( 400, "Members of Group"),
-
+				NavMenuItem.create(401, LoginActivity.user.getFirstName() + " " + LoginActivity.user.getLastName(), "", "ic_action_add_group", false, this)
 		};
 
 		navDrawerActivityConfiguration = new NavDrawerActivityConfiguration();

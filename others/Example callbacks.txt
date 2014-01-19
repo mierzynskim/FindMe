@@ -1,0 +1,85 @@
+		//Testy DatabaseProxy
+		DatabaseProxy db = new DatabaseProxy(this);
+						
+//		db.addUser(mUserFacebookId, "albertwolant@gmail.com", new TableOperationCallback<Users>() 
+//				{			
+//			@Override
+//			public void onCompleted(Users arg0, Exception arg1,
+//					ServiceFilterResponse arg2) {
+//				if(arg1 == null)
+//				{
+//					Log.i("service", "xxx USER ADD OK");
+//				}
+//				else
+//					Log.i("service", "xxx USER ADD NIE OK " + arg1.getMessage());		
+//			}
+//		});
+
+		
+
+//		db.addGroup(mUserFacebookId, "Super grupa druga", "Ale fajna to grupa. 2", "qwerty123", true, new TableOperationCallback<Groups>() {
+//			@Override
+//			public void onCompleted(Groups arg0, Exception arg1,
+//					ServiceFilterResponse arg2) {
+//				if(arg1 == null)
+//				{
+//					Log.i("service", "xxx GROUP ADD OK");
+//					mGroupId = arg0.Id;
+//				}
+//				else
+//					Log.i("service", "xxx GROUP NIE ADD OK");
+//			}
+//		});
+		
+//		db.addUserToGroup(mUserFacebookId, "CADE01A9-B3D8-4BFA-9600-B11D8515D8B6" , null, new TableOperationCallback<UsersGroups>() {
+//
+//			@Override
+//			public void onCompleted(UsersGroups arg0, Exception arg1,
+//					ServiceFilterResponse arg2) {
+//				// TODO Auto-generated method stub
+//				if(arg1 == null)
+//					Log.i("service", "User dodany do grupy");
+//				else
+//					Log.i("service", "User NIE dodany do grupy");				
+//			}
+//		});
+		
+		
+//	Uwaga: callback wywołuje się osobno dla każdej grupy
+//		db.getUserGroups(mUserFacebookId, new TableQueryCallback<Groups>() {
+//			
+//			@Override
+//			public void onCompleted(List<Groups> arg0, int arg1, Exception arg2,
+//					ServiceFilterResponse arg3) {
+//				if(arg2 == null)
+//				{
+//					Groups group  = arg0.get(0);
+//					Log.i("service", group.Id + " " + group.name + " " + group.description);
+//				}
+//				
+//			}
+//		});
+		
+//		db.getGroupByName("Super grupa", new TableQueryCallback<Groups>() {
+//			
+//			@Override
+//			public void onCompleted(List<Groups> arg0, int arg1, Exception arg2,
+//					ServiceFilterResponse arg3) {
+//				if(arg2 == null)
+//					for(Groups group : arg0)
+//						Log.i("service", group.Id + " " + group.name + " " + group.description);
+//				
+//			}
+//		});
+		
+//		db.addEvent("9CDE2757-E243-4055-B0BB-6E9EA63A4A5B", "Super event", "Opis eventu", 52.01, 28.006, "www.mini.pw.edu.pl",
+//				new java.util.Date(2014,1,2), new java.util.Date(2014,3,4), new TableOperationCallback<GroupsEvents>() {
+//					
+//					@Override
+//					public void onCompleted(GroupsEvents arg0, Exception arg1,
+//							ServiceFilterResponse arg2) {
+//						if(arg1 == null)
+//							Log.i("service", "Dodano Event o ID " + arg0.eventId);
+//						
+//					}
+//				});
