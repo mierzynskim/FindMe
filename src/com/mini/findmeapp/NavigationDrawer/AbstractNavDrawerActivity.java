@@ -49,7 +49,6 @@ public abstract class AbstractNavDrawerActivity extends FragmentActivity {
     protected void refreshDrawer() {
         navConf = getNavDrawerConfiguration();
         
-        
         mDrawerLayout = (DrawerLayout) findViewById(navConf.getDrawerLayoutId());
         mDrawerListLeft = (ListView) findViewById(navConf.getLeftDrawerId());
         mDrawerListLeft.setAdapter(navConf.getBaseAdapterLeft());

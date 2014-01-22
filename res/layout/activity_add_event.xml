@@ -34,7 +34,8 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:hint="@string/event_start_date"
-            android:inputType="date" />
+            android:inputType="date"
+            android:configChanges="keyboardHidden|orientation" />
 
         <EditText
             android:id="@+id/startHour"
@@ -42,7 +43,8 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:hint="@string/event_start_hour"
-            android:inputType="date" />
+            android:inputType="date"
+            android:configChanges="keyboardHidden|orientation" />
     </LinearLayout>
 
     <LinearLayout
@@ -69,6 +71,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/submitButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"

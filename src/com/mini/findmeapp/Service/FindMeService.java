@@ -3,7 +3,11 @@ package com.mini.findmeapp.Service;
 import java.net.MalformedURLException;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import com.facebook.widget.LoginButton;
+import com.google.android.gms.maps.MapView;
 import com.microsoft.windowsazure.mobileservices.*;
+import com.mini.findmeapp.R;
 
 import android.app.Service;
 import android.content.Intent;
@@ -157,6 +161,7 @@ public class FindMeService extends Service
 			mUserLocationItem.userLatitude = latitude;
 			mUserLocationItem.userLongitude = longitude;
 			
+			
 			MobileServiceTable<UsersLocations> usersLocationsTable = mClient.getTable(UsersLocations.class);
 			
 			usersLocationsTable.update(mUserLocationItem, new TableOperationCallback<UsersLocations>() 
@@ -178,9 +183,5 @@ public class FindMeService extends Service
 		{
                 return null;
         }
-        
-        
-
-
 }
 
