@@ -13,8 +13,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
@@ -41,54 +43,49 @@ public class AddEventActivity extends FragmentActivity {
 		databaseProxy = new DatabaseProxy(this);
 		
 		setupActionBar();
-		findViewById(R.id.startDate).setOnTouchListener(new OnTouchListener() {
+		findViewById(R.id.startDate).setOnClickListener(new OnClickListener() {
 			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (event.getAction() == MotionEvent.ACTION_UP) {
+			public void onClick(View v) {
 					InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 					mgr.hideSoftInputFromWindow(v.getWindowToken(), 0);
 					activeDialog = ACTIVE_DIALOG.START_DATE;
 					showDatePicker();
-				}
-				return false;
 			}
 		});
-		findViewById(R.id.endDate).setOnTouchListener(new OnTouchListener() {
+		findViewById(R.id.endDate).setOnClickListener(new OnClickListener() {
 			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (event.getAction() == MotionEvent.ACTION_UP) {
-					InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-					mgr.hideSoftInputFromWindow(v.getWindowToken(), 0);
-					activeDialog = ACTIVE_DIALOG.END_DATE;
-					showDatePicker();
-				}
-				return false;
+			public void onClick(View v) {
+				InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				mgr.hideSoftInputFromWindow(v.getWindowToken(), 0);
+				activeDialog = ACTIVE_DIALOG.END_DATE;
+				showDatePicker();
 			}
 		});
-		findViewById(R.id.startHour).setOnTouchListener(new OnTouchListener() {
+		findViewById(R.id.startHour).setOnClickListener(new OnClickListener() {
 			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (event.getAction() == MotionEvent.ACTION_UP) {
-					InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-					mgr.hideSoftInputFromWindow(v.getWindowToken(), 0);
-					activeDialog = ACTIVE_DIALOG.START_TIME;
-					showTimePicker();
-				}
-				return false;
+			public void onClick(View v) {
+				InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				mgr.hideSoftInputFromWindow(v.getWindowToken(), 0);
+				activeDialog = ACTIVE_DIALOG.START_TIME;
+				showTimePicker();
 			}
 		});
-		findViewById(R.id.endHour).setOnTouchListener(new OnTouchListener() {
+		findViewById(R.id.endHour).setOnClickListener(new OnClickListener() {
 			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (event.getAction() == MotionEvent.ACTION_UP) {
-					InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-					mgr.hideSoftInputFromWindow(v.getWindowToken(), 0);
-					activeDialog = ACTIVE_DIALOG.END_TIME;
-					showTimePicker();
-				}
-				return false;
+			public void onClick(View v) {
+				InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				mgr.hideSoftInputFromWindow(v.getWindowToken(), 0);
+				activeDialog = ACTIVE_DIALOG.END_TIME;
+				showTimePicker();
 			}
 		});
+
+        final Button button = (Button) findViewById(R.id.submitButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+            }
+        });
 	}
 
 	private void setupActionBar() {
@@ -127,12 +124,12 @@ public class AddEventActivity extends FragmentActivity {
 				int dayOfMonth) {
 			Calendar date = new  GregorianCalendar(year, monthOfYear, dayOfMonth);
 			if (activeDialog == ACTIVE_DIALOG.START_DATE) {
-				EditText startDateText = (EditText)findViewById(R.id.startDate);
+				Button startDateText = (Button)findViewById(R.id.startDate);
 				startDateText.setText(composeDateString(date));
 				event.startDate = date.getTime();
 			}
 			else {
-				EditText endEditText = (EditText)findViewById(R.id.endDate);
+				Button endEditText = (Button)findViewById(R.id.endDate);
 				endEditText.setText(composeDateString(date));
 				event.endDate = date.getTime();
 				
@@ -145,11 +142,11 @@ public class AddEventActivity extends FragmentActivity {
 		@Override
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 			if (activeDialog == ACTIVE_DIALOG.START_TIME) {
-				EditText startDateText = (EditText)findViewById(R.id.startHour);
+				Button startDateText = (Button)findViewById(R.id.startHour);
 				startDateText.setText(hourOfDay + ":" + minute);
 			}
 			else {
-				EditText endEditText = (EditText)findViewById(R.id.endHour);
+				Button endEditText = (Button)findViewById(R.id.endHour);
 				endEditText.setText(hourOfDay + ":" + minute);
 			}
 			

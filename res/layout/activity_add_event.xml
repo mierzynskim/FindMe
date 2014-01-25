@@ -28,23 +28,22 @@
         android:layout_marginBottom="10dp"
         android:orientation="horizontal" >
 
-        <EditText
+        <Button
             android:id="@+id/startDate"
-            android:layout_width="wrap_content"
+            style="?android:attr/spinnerStyle"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:hint="@string/event_start_date"
-            android:inputType="date"
-            android:configChanges="keyboardHidden|orientation" />
+            android:text="@string/event_start_date"
+            android:width="35dp" />
 
-        <EditText
+        <Button
             android:id="@+id/startHour"
-            android:layout_width="wrap_content"
+            style="?android:attr/spinnerStyle"
+            android:layout_width="82dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:hint="@string/event_start_hour"
-            android:inputType="date"
-            android:configChanges="keyboardHidden|orientation" />
+            android:text="@string/event_start_hour" />
     </LinearLayout>
 
     <LinearLayout
@@ -53,21 +52,22 @@
         android:layout_marginBottom="10dp"
         android:orientation="horizontal" >
 
-        <EditText
+        <Button
             android:id="@+id/endDate"
-            android:layout_width="wrap_content"
+            style="?android:attr/spinnerStyle"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:hint="@string/event_end_date"
-            android:inputType="date" />
+            android:text="@string/event_end_date"
+            android:width="35dp" />
 
-        <EditText
+        <Button
             android:id="@+id/endHour"
-            android:layout_width="wrap_content"
+            style="?android:attr/spinnerStyle"
+            android:layout_width="82dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:hint="@string/event_end_hour"
-            android:inputType="date" />
+            android:text="@string/event_end_hour" />
     </LinearLayout>
 
     <Button
