@@ -1,6 +1,5 @@
 package com.mini.findmeapp;
 
-import java.util.Timer;
 
 import android.content.Intent;
 import android.os.Bundle;
