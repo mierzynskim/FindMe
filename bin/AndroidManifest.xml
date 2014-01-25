@@ -80,6 +80,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mini.findmeapp.MainActivity" />
         </activity>
+        <activity
+            android:name="com.mini.findmeapp.PickLocationActivity"
+            android:label="@string/title_activity_pick_location"
+            android:launchMode="singleTop"
+            android:parentActivityName="com.mini.findmeapp.AddEventActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mini.findmeapp.AddEventActivity" />
+        </activity>
     </application>
 
 </manifest>

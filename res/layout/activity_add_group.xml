@@ -5,18 +5,22 @@
     android:orientation="vertical" >
 
     <EditText
+        android:id="@+id/groupName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:hint="@string/group_name" />
 
     <EditText
+        android:id="@+id/groupPassword"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
+        android:inputType="textPassword"
         android:hint="@string/group_password" />
 
     <EditText
+        android:id="@+id/groupDescribtion"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
@@ -42,6 +46,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/submitGroupButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"

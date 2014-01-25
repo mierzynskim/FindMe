@@ -5,24 +5,24 @@ import java.util.GregorianCalendar;
 
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog.OnTimeSetListener;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.TimePicker;
 
+import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
+import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 import com.mini.findmeapp.AzureConnection.DatabaseProxy;
 import com.mini.findmeapp.AzureConnection.Events;
+import com.mini.findmeapp.AzureConnection.GroupsEvents;
 
 public class AddEventActivity extends FragmentActivity {
 	
@@ -46,8 +46,6 @@ public class AddEventActivity extends FragmentActivity {
 		findViewById(R.id.startDate).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-					InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-					mgr.hideSoftInputFromWindow(v.getWindowToken(), 0);
 					activeDialog = ACTIVE_DIALOG.START_DATE;
 					showDatePicker();
 			}
@@ -55,8 +53,6 @@ public class AddEventActivity extends FragmentActivity {
 		findViewById(R.id.endDate).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-				mgr.hideSoftInputFromWindow(v.getWindowToken(), 0);
 				activeDialog = ACTIVE_DIALOG.END_DATE;
 				showDatePicker();
 			}
@@ -64,8 +60,6 @@ public class AddEventActivity extends FragmentActivity {
 		findViewById(R.id.startHour).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-				mgr.hideSoftInputFromWindow(v.getWindowToken(), 0);
 				activeDialog = ACTIVE_DIALOG.START_TIME;
 				showTimePicker();
 			}
@@ -73,20 +67,61 @@ public class AddEventActivity extends FragmentActivity {
 		findViewById(R.id.endHour).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-				mgr.hideSoftInputFromWindow(v.getWindowToken(), 0);
 				activeDialog = ACTIVE_DIALOG.END_TIME;
 				showTimePicker();
 			}
 		});
+		
+		findViewById(R.id.eventLocation).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(AddEventActivity.this, PickLocationActivity.class);
+				AddEventActivity.this.startActivityForResult(intent, 11);
+			}
+		});
 
-        final Button button = (Button) findViewById(R.id.submitButton);
+        final Button button = (Button) findViewById(R.id.submitEventButton);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Perform action on click
+//            	EditText eventName = (EditText) findViewById(R.id.eventName);
+//            	EditText eventDescribtion = (EditText) findViewById(R.id.eventDesctibtion);
+//            	EditText event = (EditText) findViewById(R.id.groupDescribtion);
+//            	CheckBox isPrivateBox = (CheckBox) findViewById(R.id.isPrivate);
+        		databaseProxy.addEvent(MainActivity.mGroupId, "Super event", "Opis eventu", 52.01, 28.006, "www.mini.pw.edu.pl",
+				new java.util.Date(2014,1,2), new java.util.Date(2014,3,4), new TableOperationCallback<GroupsEvents>() {
+					
+					@Override
+					public void onCompleted(GroupsEvents arg0, Exception arg1,
+							ServiceFilterResponse arg2) {
+						if(arg1 == null) {
+							Log.i("service", "Dodano Event o ID " + arg0.eventId);
+							AddEventActivity.this.finish();
+						}
+						
+					}
+				});
             }
         });
 	}
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		  if (requestCode == 11) {
+		     if(resultCode == RESULT_OK) {      
+		    	 Bundle extras = getIntent().getExtras();
+		    	 Double latitude = extras.getDouble("latitude");
+		    	 Double longitude = extras.getDouble("longitude");  
+		    	 Button button = (Button) findViewById(R.id.eventLocation);
+		    	 Log.i("result", latitude.toString());
+		    	 button.setText(latitude.toString() + longitude.toString());
+		     }
+
+		  }
+		  else {
+			  Log.i("null", "NULL");
+		  }
+		  
+	}
+		
 
 	private void setupActionBar() {
 		getActionBar().setDisplayHomeAsUpEnabled(true);

@@ -5,12 +5,10 @@
     <string name="app_name">Find Me</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-    
     <string name="app_id">568927569827417</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_add_group">Add new group</string>
     <string name="title_activity_add_event">Add new event</string>
-    
     <string name="event_name">Event name</string>
     <string name="event_desctibtion">Desctibtion</string>
     <string name="event_location">Location</string>
@@ -18,14 +16,12 @@
     <string name="event_start_hour">10:00</string>
     <string name="event_end_date">End date</string>
     <string name="event_end_hour">10:00</string>
-    
     <string name="submit">Submit</string>
-    
     <string name="group_password">Password</string>
     <string name="group_is_private">Do you want to keep it private?</string>
     <string name="group_describtion">Describtion</string>
     <string name="group_name">Name</string>
-    
-    
+    <string name="title_activity_pick_location">PickLocationActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

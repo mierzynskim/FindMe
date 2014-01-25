@@ -1,10 +1,21 @@
 package com.mini.findmeapp;
 
 
+import java.util.List;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.facebook.widget.LoginButton;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
+import com.microsoft.windowsazure.mobileservices.TableQueryCallback;
 import com.mini.findmeapp.NavigationDrawer.AbstractNavDrawerActivity;
 import com.mini.findmeapp.NavigationDrawer.NavDrawerActivityConfiguration;
 import com.mini.findmeapp.NavigationDrawer.NavDrawerAdapter;
@@ -12,6 +23,7 @@ import com.mini.findmeapp.NavigationDrawer.NavDrawerItem;
 import com.mini.findmeapp.NavigationDrawer.NavMenuItem;
 import com.mini.findmeapp.NavigationDrawer.NavMenuSection;
 import com.mini.findmeapp.Service.ServiceProxy;
+import com.mini.findmeapp.Service.UsersLocations;
 
 
 public class MainActivity extends AbstractNavDrawerActivity {
@@ -21,22 +33,59 @@ public class MainActivity extends AbstractNavDrawerActivity {
 	private Timer mTimer;
 	
 	private NavDrawerActivityConfiguration navDrawerActivityConfiguration;
+	
+	public static String mGroupId;
+	
+	private GoogleMap mMap;
 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		initMenu();
 		super.onCreate(savedInstanceState);
-
+		//setContentView(R.layout.activity_main);
 		getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new GoogleMapFragment()).commit();
-
+		
 		LoginButton authButton = (LoginButton)findViewById(R.id.authButton);
 		//Wystartowanie serwisu
 		mServiceProxy = new ServiceProxy(this, LoginActivity.user.getId(), "6ED74A78-0B5E-4C1E-9ED6-0220B6724562", "9CDE2757-E243-4055-B0BB-6E9EA63A4A5B", mCaption);
 		mServiceProxy.StartService();
 		
-		
+		mTimer = new Timer(MainActivity.this, 10, "F9898B0B-DF9E-4438-B8C8-3B4269F6E491",
+				"5807C320-BF71-46C8-BD5B-3283ACF754EF", new TableQueryCallback<UsersLocations>() {
+					
+					@Override
+					public void onCompleted(List<UsersLocations> arg0, int arg1,
+							Exception arg2, ServiceFilterResponse arg3) {
+						if (arg0 != null){
+							for (UsersLocations usersLocations : arg0) {
+								mMap.addMarker(new MarkerOptions().position(new LatLng(usersLocations.userLatitude,
+										usersLocations.userLongitude)));
+								
+							}
+							
+						}
+						Log.i("TIMER", "TIMER COMPLETE");
+						
+					}
+				});
+		mTimer.StartTimer();
+	}
+	
+	@Override
+	public void onStart() {
+	    super.onStart();
+    	MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+    	mMap = mapFragment.getMap();
+
+    	mMap.setOnMapClickListener(new OnMapClickListener() {
+			@Override
+			public void onMapClick(LatLng point) {
+				mMap.addMarker(new MarkerOptions().position(point));
+				Log.i("tap", "xxx GROUP ADD OK");
 				
+			}
+		});
 	}
 
 	//Przy zniszczeniu aplikacji dodatkowo zatrzymujemy serwis

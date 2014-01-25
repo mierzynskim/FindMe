@@ -5,22 +5,26 @@
     android:orientation="vertical" >
 
     <EditText
+        android:id="@+id/eventName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:hint="@string/event_name" />
 
     <EditText
+        android:id="@+id/eventDesctibtion"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:hint="@string/event_desctibtion" />
 
-    <EditText
+    <Button
+        android:id="@+id/eventLocation"
+        style="?android:attr/spinnerStyle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:hint="@string/event_location" />
+        android:text="@string/event_location" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -71,7 +75,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/submitButton"
+        android:id="@+id/submitEventButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"

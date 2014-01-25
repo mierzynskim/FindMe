@@ -21,6 +21,7 @@ import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 import com.mini.findmeapp.AzureConnection.DatabaseProxy;
 import com.mini.findmeapp.AzureConnection.Users;
+import com.mini.findmeapp.AzureConnection.UsersGroups;
 
 public class LoginActivity extends FragmentActivity {
 	public static final String USER_INFO = "UserInfo";
@@ -51,6 +52,7 @@ public class LoginActivity extends FragmentActivity {
                         	if (userId == null) { 
                         		addNewUser();
                         	}
+
                         	Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         	startActivity(intent);
@@ -77,6 +79,18 @@ public class LoginActivity extends FragmentActivity {
 				}
 				else
 					Log.i("service", "xxx USER ADD NIE OK " + arg1.getMessage());		
+			}
+		});
+		db.addUserToGroup(user.getId(), "F9898B0B-DF9E-4438-B8C8-3B4269F6E491" , "tajne2", new TableOperationCallback<UsersGroups>() {
+        	
+			@Override
+			public void onCompleted(UsersGroups arg0, Exception arg1,
+					ServiceFilterResponse arg2) {
+				// TODO Auto-generated method stub
+				if(arg1 == null)
+					Log.i("service", "User dodany do grupy");
+				else
+					Log.i("service", "User NIE dodany do grupy");				
 			}
 		});
 	}
