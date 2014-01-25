@@ -34,6 +34,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 
 	private String mCaption = "opis na mapce";
 	private ServiceProxy mServiceProxy;
+	private Timer mTimer;
 	
 	private NavDrawerActivityConfiguration navDrawerActivityConfiguration;
 
@@ -49,6 +50,8 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		//Wystartowanie serwisu
 		mServiceProxy = new ServiceProxy(this, LoginActivity.user.getId(), "6ED74A78-0B5E-4C1E-9ED6-0220B6724562", "9CDE2757-E243-4055-B0BB-6E9EA63A4A5B", mCaption);
 		mServiceProxy.StartService();
+		
+		
 				
 	}
 
