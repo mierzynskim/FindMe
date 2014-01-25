@@ -1,25 +1,11 @@
 package com.mini.findmeapp;
 
-import java.sql.Date;
-import java.util.List;
+import java.util.Timer;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.facebook.widget.LoginButton;
-import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
-import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
-
-import com.microsoft.windowsazure.mobileservices.TableQueryCallback;
-import com.mini.findmeapp.AzureConnection.DatabaseProxy;
-import com.mini.findmeapp.AzureConnection.Events;
-
-import com.mini.findmeapp.AzureConnection.Groups;
-import com.mini.findmeapp.AzureConnection.GroupsEvents;
-import com.mini.findmeapp.AzureConnection.Users;
-import com.mini.findmeapp.AzureConnection.UsersGroups;
 import com.mini.findmeapp.NavigationDrawer.AbstractNavDrawerActivity;
 import com.mini.findmeapp.NavigationDrawer.NavDrawerActivityConfiguration;
 import com.mini.findmeapp.NavigationDrawer.NavDrawerAdapter;
@@ -27,13 +13,13 @@ import com.mini.findmeapp.NavigationDrawer.NavDrawerItem;
 import com.mini.findmeapp.NavigationDrawer.NavMenuItem;
 import com.mini.findmeapp.NavigationDrawer.NavMenuSection;
 import com.mini.findmeapp.Service.ServiceProxy;
-import com.mini.findmeapp.Service.UsersLocations;
 
 
 public class MainActivity extends AbstractNavDrawerActivity {
 
 	private String mCaption = "opis na mapce";
 	private ServiceProxy mServiceProxy;
+	private Timer mTimer;
 	
 	private NavDrawerActivityConfiguration navDrawerActivityConfiguration;
 
@@ -49,6 +35,8 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		//Wystartowanie serwisu
 		mServiceProxy = new ServiceProxy(this, LoginActivity.user.getId(), "6ED74A78-0B5E-4C1E-9ED6-0220B6724562", "9CDE2757-E243-4055-B0BB-6E9EA63A4A5B", mCaption);
 		mServiceProxy.StartService();
+		
+		
 				
 	}
 
