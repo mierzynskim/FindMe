@@ -48,17 +48,18 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		
 		LoginButton authButton = (LoginButton)findViewById(R.id.authButton);
 		//Wystartowanie serwisu
-		mServiceProxy = new ServiceProxy(this, LoginActivity.user.getId(), "6ED74A78-0B5E-4C1E-9ED6-0220B6724562", "9CDE2757-E243-4055-B0BB-6E9EA63A4A5B", mCaption);
+		mServiceProxy = new ServiceProxy(this, LoginActivity.user.getId(), "15A9BBC2-340D-426D-A158-2CEFE3FF8ECC", "F9898B0B-DF9E-4438-B8C8-3B4269F6E491", mCaption);
 		mServiceProxy.StartService();
 		
 		mTimer = new Timer(MainActivity.this, 10, "F9898B0B-DF9E-4438-B8C8-3B4269F6E491",
-				"5807C320-BF71-46C8-BD5B-3283ACF754EF", new TableQueryCallback<UsersLocations>() {
+				"15A9BBC2-340D-426D-A158-2CEFE3FF8ECC", new TableQueryCallback<UsersLocations>() {
 					
 					@Override
 					public void onCompleted(List<UsersLocations> arg0, int arg1,
 							Exception arg2, ServiceFilterResponse arg3) {
 						if (arg0 != null){
 							for (UsersLocations usersLocations : arg0) {
+								Log.i("service", String.valueOf(usersLocations.userLatitude) );
 								mMap.addMarker(new MarkerOptions().position(new LatLng(usersLocations.userLatitude,
 										usersLocations.userLongitude)));
 								
