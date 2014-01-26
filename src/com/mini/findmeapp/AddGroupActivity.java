@@ -19,6 +19,8 @@ import com.mini.findmeapp.AzureConnection.Groups;
 public class AddGroupActivity extends Activity {
 	
 	private DatabaseProxy databaseProxy ;
+	//Klasa trzyma dane sesji i zapisuje je do sharedpreferences
+	public SessionData mSessionData;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +28,12 @@ public class AddGroupActivity extends Activity {
 		setContentView(R.layout.activity_add_group);
 		setupActionBar();
 		databaseProxy = new DatabaseProxy(this);
+		mSessionData = new SessionData(getSharedPreferences(SessionData.FILE_NAME, 0));
         final Button button = (Button) findViewById(R.id.submitGroupButton);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
             	EditText groupName = (EditText) findViewById(R.id.groupName);
-            	EditText groupPassword = (EditText) findViewById(R.id.groupPassword);
+            	final EditText groupPassword = (EditText) findViewById(R.id.groupPassword);
             	EditText groupDescribtion = (EditText) findViewById(R.id.groupDescribtion);
             	CheckBox isPrivateBox = (CheckBox) findViewById(R.id.isPrivate);
             	databaseProxy.addGroup(LoginActivity.user.getId(), groupName.getText().toString(), groupDescribtion.getText().toString(), 
@@ -41,7 +44,8 @@ public class AddGroupActivity extends Activity {
     				if(arg1 == null)
     				{
     					Log.i("service", "xxx GROUP ADD OK");
-    					MainActivity.mGroupId = arg0.Id;
+    					mSessionData.setGroupId(arg0.Id);
+    					databaseProxy.addUserToGroup(LoginActivity.user.getId(), arg0.Id, groupPassword.getText().toString(), null);
     					AddGroupActivity.this.finish();
     					//mGroupId = arg0.Id;
     				}

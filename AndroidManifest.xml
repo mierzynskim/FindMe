@@ -29,7 +29,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDGahNYvMaIMLBP8tjywQx56kLuQ2ljxoE" />
+            android:value="D67250F3E97DCFF75B723A2D7D7F59B8F6F02415" />
 
         <activity
             android:name="com.mini.findmeapp.MainActivity"

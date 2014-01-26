@@ -29,6 +29,9 @@ public class AddEventActivity extends FragmentActivity {
 	private DatabaseProxy databaseProxy;
 	private Events event = new Events();
 	
+	//Klasa trzyma dane sesji i zapisuje je do sharedpreferences
+	public SessionData mSessionData;
+	
 	public enum ACTIVE_DIALOG {
 	    START_DATE, END_DATE, START_TIME, END_TIME
 	}
@@ -41,6 +44,7 @@ public class AddEventActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_event);
 		databaseProxy = new DatabaseProxy(this);
+		mSessionData = new SessionData(getSharedPreferences(SessionData.FILE_NAME, 0));
 		
 		setupActionBar();
 		findViewById(R.id.startDate).setOnClickListener(new OnClickListener() {
@@ -87,7 +91,7 @@ public class AddEventActivity extends FragmentActivity {
 //            	EditText eventDescribtion = (EditText) findViewById(R.id.eventDesctibtion);
 //            	EditText event = (EditText) findViewById(R.id.groupDescribtion);
 //            	CheckBox isPrivateBox = (CheckBox) findViewById(R.id.isPrivate);
-        		databaseProxy.addEvent(MainActivity.mGroupId, "Super event", "Opis eventu", 52.01, 28.006, "www.mini.pw.edu.pl",
+        		databaseProxy.addEvent(mSessionData.getGroupId(), "Super event", "Opis eventu", 52.01, 28.006, "www.mini.pw.edu.pl",
 				new java.util.Date(2014,1,2), new java.util.Date(2014,3,4), new TableOperationCallback<GroupsEvents>() {
 					
 					@Override
@@ -95,6 +99,7 @@ public class AddEventActivity extends FragmentActivity {
 							ServiceFilterResponse arg2) {
 						if(arg1 == null) {
 							Log.i("service", "Dodano Event o ID " + arg0.eventId);
+							mSessionData.setEventId(arg0.eventId);
 							AddEventActivity.this.finish();
 						}
 						

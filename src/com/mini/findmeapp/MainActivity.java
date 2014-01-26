@@ -1,6 +1,4 @@
 package com.mini.findmeapp;
-
-
 import java.util.List;
 
 import android.content.Intent;
@@ -25,34 +23,46 @@ import com.mini.findmeapp.NavigationDrawer.NavMenuSection;
 import com.mini.findmeapp.Service.ServiceProxy;
 import com.mini.findmeapp.Service.UsersLocations;
 
-
 public class MainActivity extends AbstractNavDrawerActivity {
 
-	private String mCaption = "opis na mapce";
+	//Proxy do obs³ugi Servisu wysy³aj¹cego lokalizacjê na serwer
 	private ServiceProxy mServiceProxy;
+	
+	//Timer do cyklicznego pobierania lokalizacji u¿ytkowników z serwera
 	private Timer mTimer;
 	
+	//Klasa trzyma dane sesji i zapisuje je do sharedpreferences
+	public SessionData mSessionData;
+	
+	//Konfiguracja panelu nawigacji
 	private NavDrawerActivityConfiguration navDrawerActivityConfiguration;
-	
-	public static String mGroupId;
-	
+		
+	//Obiekt mapy
 	private GoogleMap mMap;
 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
+		
+		//Inicjalizacja menu bocznych
 		initMenu();
+		
 		super.onCreate(savedInstanceState);
+		
 		//setContentView(R.layout.activity_main);
 		getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new GoogleMapFragment()).commit();
 		
 		LoginButton authButton = (LoginButton)findViewById(R.id.authButton);
-		//Wystartowanie serwisu
-		mServiceProxy = new ServiceProxy(this, LoginActivity.user.getId(), "15A9BBC2-340D-426D-A158-2CEFE3FF8ECC", "F9898B0B-DF9E-4438-B8C8-3B4269F6E491", mCaption);
-		mServiceProxy.StartService();
 		
-		mTimer = new Timer(MainActivity.this, 10, "F9898B0B-DF9E-4438-B8C8-3B4269F6E491",
-				"15A9BBC2-340D-426D-A158-2CEFE3FF8ECC", new TableQueryCallback<UsersLocations>() {
+		//Utworzenie SessionData
+		mSessionData = new SessionData(getSharedPreferences(SessionData.FILE_NAME, 0));
+		//Wystartowanie serwisu
+		mServiceProxy = new ServiceProxy(this, LoginActivity.user.getId(), mSessionData.getEventId(),
+				mSessionData.getGroupId(), mSessionData.getCaption());
+		
+		//Utworzenie timera
+		mTimer = new Timer(MainActivity.this, 10, mSessionData.getGroupId(),
+				mSessionData.getEventId(), new TableQueryCallback<UsersLocations>() {
 					
 					@Override
 					public void onCompleted(List<UsersLocations> arg0, int arg1,
@@ -88,10 +98,21 @@ public class MainActivity extends AbstractNavDrawerActivity {
 			}
 		});
     	
+    	//Wystartowanie timera
     	mTimer.StartTimer();
+    	
+    	//Uaktualnienie informacji o grupie i evencie
+    	mServiceProxy.ChangeGroup(mSessionData.getGroupId(), mSessionData.getEventId());
 	}
-
-	//Przy zniszczeniu aplikacji dodatkowo zatrzymujemy serwis
+	
+	//Przy zatrzymaniu MainActivity zatrzymujemy te¿ Timer
+	@Override
+	protected void onStop() {
+		mTimer.StopTimer();
+		super.onStop();
+	};
+	
+	//Przy zniszczeniu aplikacji dodatkowo zatrzymujemy serwis i Timer
 	@Override
 	protected void onDestroy()
 	{
@@ -109,6 +130,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 
 	@Override
 	protected void onNavItemSelected(int id) {
+		//TODO: change data in mSessionData
 		switch ((int)id) {
 		case 101:
 //			NavDrawerItem[] menu = new NavDrawerItem[] {
