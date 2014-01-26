@@ -5,6 +5,7 @@ import com.mini.findmeapp.AzureConnection.DatabaseProxy;
 import com.mini.findmeapp.Service.UsersLocations;
 
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.util.Log;
 
 //Wystartowanie timera;
@@ -16,15 +17,17 @@ import android.util.Log;
 //mTimer.CancelTimer();
 		
 
-public class Timer extends AsyncTask<Void, Void, Void> {
+public class Timer{
 	
-	private Boolean mIsStopped = false;
 	private final MainActivity mMainActivity;
-	private final Long mTimeout;
+	private final Integer mTimeout;
 	private final DatabaseProxy mDb;
 	private String mGroupId;
 	private String mEventId;
 	private final TableQueryCallback<UsersLocations> mCallback;
+	
+	private Handler mHandler;
+	private Runnable mRunnable;
 	
 	
 	//Konstruktor
@@ -32,41 +35,37 @@ public class Timer extends AsyncTask<Void, Void, Void> {
 	public Timer(MainActivity mainActivity, int timeout, String groupId, String eventId, TableQueryCallback<UsersLocations> callback ) 
 	{
 		mMainActivity = mainActivity;
-		mTimeout = (long)timeout * 1000;
+		mTimeout = timeout * 1000;
 		mDb = new DatabaseProxy(mMainActivity);
 		mGroupId = groupId;
 		mEventId = eventId;
 		mCallback = callback;
-	
-	}
-
-	@Override
-	protected Void doInBackground(Void... params) {
-		while(!mIsStopped){
-			
-			try {
-				Thread.sleep(mTimeout);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			
-			Log.i("service", "xxx Timer tick");
-			mDb.getUsersLocations(mGroupId, mEventId, mCallback);
-
-		}
 		
-		Log.i("service", "xxx Timer stopped");
-		return null;
+		mHandler = new Handler();
+		
+		mRunnable = new Runnable() {
+			@Override
+			public void run() {
+				Log.i("service", "xxx Timer tick");
+				mDb.getUsersLocations(mGroupId, mEventId, mCallback);
+				mHandler.postDelayed(this, mTimeout);
+			}
+		};
+
 	}
+
+	
 	
 	//Metoda zatrzymuj¹ca Timer
-	public void CancelTimer(){
-		mIsStopped = true;
+	public void StopTimer(){
+		Log.i("service", "xxx TIMER STOPPED");
+		mHandler.removeCallbacks(mRunnable);
 	}
 	
 	public void StartTimer()
 	{
-		this.execute(null,null,null);
+		Log.i("service", "xxx TIMER STARTED");
+		mHandler.postDelayed(mRunnable, mTimeout);
 	}
 	
 	public void ChangeParameters(String groupId, String eventId)

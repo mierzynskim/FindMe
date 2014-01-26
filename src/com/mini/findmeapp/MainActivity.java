@@ -69,7 +69,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 						
 					}
 				});
-		mTimer.StartTimer();
+		
 	}
 	
 	@Override
@@ -86,6 +86,8 @@ public class MainActivity extends AbstractNavDrawerActivity {
 				
 			}
 		});
+    	
+    	mTimer.StartTimer();
 	}
 
 	//Przy zniszczeniu aplikacji dodatkowo zatrzymujemy serwis
@@ -93,6 +95,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 	protected void onDestroy()
 	{
 		mServiceProxy.StopService();
+		mTimer.StopTimer();
 		super.onDestroy();
 	}
 
