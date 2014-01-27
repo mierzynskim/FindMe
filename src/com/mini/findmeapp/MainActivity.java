@@ -1,5 +1,8 @@
 package com.mini.findmeapp;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +17,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.TableQueryCallback;
+import com.mini.findmeapp.AzureConnection.DatabaseProxy;
+import com.mini.findmeapp.AzureConnection.Groups;
 import com.mini.findmeapp.NavigationDrawer.AbstractNavDrawerActivity;
 import com.mini.findmeapp.NavigationDrawer.NavDrawerActivityConfiguration;
 import com.mini.findmeapp.NavigationDrawer.NavDrawerAdapter;
@@ -158,23 +163,55 @@ public class MainActivity extends AbstractNavDrawerActivity {
 	};
 	
 	private void initMenu() {
-		NavDrawerItem[] menu = new NavDrawerItem[] {
-				NavMenuSection.create( 100, "Group 1"),
-				NavMenuItem.create(102,"Event 1", "Group 1", "ic_action_new_event", true, this),
-				NavMenuItem.create(103,"Event 2","Group 1", "ic_action_new_event", true, this),
-				NavMenuSection.create( 200, "Group 2"),
-				NavMenuItem.create(201,"Event 1","Group 2", "ic_action_new_event", true, this),
-				NavMenuItem.create(202,"Event 2","Group 2", "ic_action_new_event", true, this),
-				NavMenuSection.create( 300, "Settings"),
-				NavMenuItem.create(302,"Add new group", "", "ic_action_new", false, this),
-				NavMenuItem.create(101,"Add event", "", "ic_action_add_group", false, this),
-				NavMenuItem.create(301,"App Settings", "", "ic_action_settings", false, this),
-		};
+		
+		DatabaseProxy db = new DatabaseProxy(this);
+		final ArrayList<NavDrawerItem> menuList = new ArrayList<NavDrawerItem>();
+		final MainActivity mSelf = this;
+		db.getUserGroups(LoginActivity.user.getId(), new TableQueryCallback<Groups>() {
+			
+			@Override
+			public void onCompleted(List<Groups> groups, int count, Exception exception,
+					ServiceFilterResponse filter) {
+				
+					if(exception == null)
+					{
+						Integer i = 0;
+					
+						Integer baseGroupIndex = 100;
+						for(Groups group : groups)
+						{
+							menuList.add(NavMenuSection.create(baseGroupIndex+100*i, group.name));
+							//TODO:add events for each group
+							++i;
+						}
+					}
+					
+					NavDrawerItem[] menu = menuList.toArray(new NavDrawerItem[menuList.size()]);
+					navDrawerActivityConfiguration.setNavItemsLeft(menu);
+					navDrawerActivityConfiguration.setBaseAdapterLeft(
+							new NavDrawerAdapter(mSelf, R.layout.navdrawer_item, menu ));
+			}
+		});
+	
+		//NavDrawerItem[] menu = new NavDrawerItem[] {
+				//NavMenuSection.create( 100, "Group 1"),
+				//NavMenuItem.create(102,"Event 1", "Group 1", "ic_action_new_event", true, this),
+				//NavMenuItem.create(103,"Event 2","Group 1", "ic_action_new_event", true, this),
+				//NavMenuSection.create( 200, "Group 2"),
+				//NavMenuItem.create(201,"Event 1","Group 2", "ic_action_new_event", true, this),
+				//NavMenuItem.create(202,"Event 2","Group 2", "ic_action_new_event", true, this),
+				//NavMenuSection.create( 300, "Settings"),
+				//NavMenuItem.create(302,"Add new group", "", "ic_action_new", false, this),
+				//NavMenuItem.create(101,"Add event", "", "ic_action_add_group", false, this),
+				//NavMenuItem.create(301,"App Settings", "", "ic_action_settings", false, this),
+		//};
 		
 		NavDrawerItem[] menu2 = new NavDrawerItem[] {
 				NavMenuSection.create( 400, "Members of Group"),
 				NavMenuItem.create(401, LoginActivity.user.getFirstName() + " " + LoginActivity.user.getLastName(), "", "ic_action_add_group", false, this)
 		};
+		
+		NavDrawerItem[] menu = menuList.toArray(new NavDrawerItem[menuList.size()]);
 
 		navDrawerActivityConfiguration = new NavDrawerActivityConfiguration();
 		navDrawerActivityConfiguration.setMainLayout(R.layout.activity_main);
@@ -190,5 +227,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 				new NavDrawerAdapter(this, R.layout.navdrawer_item, menu ));
 		navDrawerActivityConfiguration.setBaseAdapterRight(
 				new NavDrawerAdapter(this, R.layout.navdrawer_item, menu2 ));
+		
+		
 	}
 }

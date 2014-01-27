@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.concurrent.locks.ReentrantLock;
 
 import android.content.Context;
 import android.util.Log;
@@ -201,7 +202,7 @@ public class DatabaseProxy {
 								{
 									for(UsersGroups item : arg0)
 									{
-										groupsInAzure.where().field("Id").eq(item.groupId).execute(callback);
+										groupsInAzure.where().field("Id").eq(item.groupId).select("password", "isPrivate", "Id", "name", "description").execute(callback);
 									}
 								}
 							}
@@ -215,6 +216,50 @@ public class DatabaseProxy {
 		
 		
 	}
+	
+	//Metoda zwraca wszystkie grupy do których nale¿y u¿ytkownik o podanym facebookId
+		//Wywo³uje metodê callback dla ka¿dej znalezionej grupy
+		public void getUserGroupsWithLock(final String userFacebookId, final TableQueryCallback<Groups> callback, final ReentrantLock lock)
+		{
+			
+			MobileServiceTable<Users> users = mClient.getTable(Users.class);
+			users.where().field("facebookId").eq(userFacebookId).select("Id").execute(new TableQueryCallback<Users>() {
+				
+				@Override
+				public void onCompleted(List<Users> arg0, int arg1, Exception arg2,
+						ServiceFilterResponse arg3) {
+					
+					lock.lock();
+					Log.i("service", "LOCk 1");
+					
+					if( arg2 == null)
+					{
+						for(Users user : arg0)
+						{
+							MobileServiceTable<UsersGroups> usersGroups = mClient.getTable(UsersGroups.class);
+							final MobileServiceTable<Groups> groupsInAzure = mClient.getTable(Groups.class);
+							
+							usersGroups.where().field("userId").eq(user.Id).select("groupId").execute(new TableQueryCallback<UsersGroups>() {
+								
+								@Override
+								public void onCompleted(List<UsersGroups> arg0, int arg1, Exception arg2,
+										ServiceFilterResponse arg3) {
+									if(arg2 == null)
+									{
+										for(UsersGroups item : arg0)
+										{
+											groupsInAzure.where().field("Id").eq(item.groupId).select("password", "isPrivate", "Id", "name", "description").execute(callback);
+										}
+									}
+								}
+							});
+						}
+						
+					}
+					
+				}
+			});
+		}
 	
 	//Metoda dodaje Event do grupy, zak³ada, ¿e jeœli user ma groupId to jest jej cz³onkiem i groupId jest poprawne ( prawdopodobnie
 	// pochodzi z metody getUserGroups lub getPublicGroups )
