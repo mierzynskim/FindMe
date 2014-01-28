@@ -22,6 +22,14 @@
     <string name="group_describtion">Describtion</string>
     <string name="group_name">Name</string>
     <string name="title_activity_pick_location">PickLocationActivity</string>
+    <string name="title_activity_add_user_to_group_main">Join an existing group</string>
+    <string name="addToPrivateGroup">Join private group</string>
+    <string name="addToPublicGroup">Join public group</string>
+    <string name="title_activity_join_private_group">JoinPrivateGroupActivity</string>
+    <string name="groupName">Group name</string>
+    <string name="password">Password</string>
+    <string name="password">Join</string>
+    <string name="title_activity_join_public_group_avtivity">JoinPublicGroupAvtivity</string>
     <string name="hello_world">Hello world!</string>
 
 </resources>

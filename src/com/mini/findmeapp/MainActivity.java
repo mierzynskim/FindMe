@@ -104,10 +104,13 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		});
     	
     	//Wystartowanie timera
+    	mTimer.ChangeParameters(mSessionData.getGroupId(), mSessionData.getEventId());
     	mTimer.StartTimer();
     	
     	//Uaktualnienie informacji o grupie i evencie
     	mServiceProxy.ChangeGroup(mSessionData.getGroupId(), mSessionData.getEventId());
+    	
+    	//TODO:uaktualnienie bocznego panelu
 	}
 	
 	//Przy zatrzymaniu MainActivity zatrzymujemy te¿ Timer
@@ -135,7 +138,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 
 	@Override
 	protected void onNavItemSelected(int id) {
-		//TODO: change data in mSessionData
+		//TODO: przy wybraniu nowego eventu zmiana info w mSessionData plus restart timera i serwisu jak w onStart
 		switch ((int)id) {
 		case 101:
 //			NavDrawerItem[] menu = new NavDrawerItem[] {
@@ -158,61 +161,36 @@ public class MainActivity extends AbstractNavDrawerActivity {
 			Intent intent = new Intent(MainActivity.this, AddGroupActivity.class);
 			startActivity(intent);
 			break;
+		case 501:
+			Intent intentAddUser = new Intent(MainActivity.this, AddUserToGroupMainActivity.class);
+			startActivity(intentAddUser);
+			break;
 		}
 
 	};
 	
 	private void initMenu() {
 		
-		DatabaseProxy db = new DatabaseProxy(this);
-		final ArrayList<NavDrawerItem> menuList = new ArrayList<NavDrawerItem>();
-		final MainActivity mSelf = this;
-		db.getUserGroups(LoginActivity.user.getId(), new TableQueryCallback<Groups>() {
-			
-			@Override
-			public void onCompleted(List<Groups> groups, int count, Exception exception,
-					ServiceFilterResponse filter) {
-				
-					if(exception == null)
-					{
-						Integer i = 0;
-					
-						Integer baseGroupIndex = 100;
-						for(Groups group : groups)
-						{
-							menuList.add(NavMenuSection.create(baseGroupIndex+100*i, group.name));
-							//TODO:add events for each group
-							++i;
-						}
-					}
-					
-					NavDrawerItem[] menu = menuList.toArray(new NavDrawerItem[menuList.size()]);
-					navDrawerActivityConfiguration.setNavItemsLeft(menu);
-					navDrawerActivityConfiguration.setBaseAdapterLeft(
-							new NavDrawerAdapter(mSelf, R.layout.navdrawer_item, menu ));
-			}
-		});
-	
-		//NavDrawerItem[] menu = new NavDrawerItem[] {
-				//NavMenuSection.create( 100, "Group 1"),
-				//NavMenuItem.create(102,"Event 1", "Group 1", "ic_action_new_event", true, this),
-				//NavMenuItem.create(103,"Event 2","Group 1", "ic_action_new_event", true, this),
-				//NavMenuSection.create( 200, "Group 2"),
-				//NavMenuItem.create(201,"Event 1","Group 2", "ic_action_new_event", true, this),
-				//NavMenuItem.create(202,"Event 2","Group 2", "ic_action_new_event", true, this),
-				//NavMenuSection.create( 300, "Settings"),
-				//NavMenuItem.create(302,"Add new group", "", "ic_action_new", false, this),
-				//NavMenuItem.create(101,"Add event", "", "ic_action_add_group", false, this),
-				//NavMenuItem.create(301,"App Settings", "", "ic_action_settings", false, this),
-		//};
+		NavDrawerItem[] menu = new NavDrawerItem[] {
+				NavMenuSection.create( 100, "Group 1"),
+				NavMenuItem.create(102,"Event 1", "Group 1", "ic_action_new_event", true, this),
+				NavMenuItem.create(103,"Event 2","Group 1", "ic_action_new_event", true, this),
+				NavMenuSection.create( 200, "Group 2"),
+				NavMenuItem.create(201,"Event 1","Group 2", "ic_action_new_event", true, this),
+				NavMenuItem.create(202,"Event 2","Group 2", "ic_action_new_event", true, this),
+				NavMenuSection.create( 300, "Settings"),
+				NavMenuItem.create(302,"Add new group", "", "ic_action_new", false, this),
+				NavMenuItem.create(101,"Add event", "", "ic_action_add_group", false, this),
+				NavMenuItem.create(501,"Join existing group", "", "ic_action_add_group", false, this),
+				NavMenuItem.create(301,"App Settings", "", "ic_action_settings", false, this),
+		};
 		
 		NavDrawerItem[] menu2 = new NavDrawerItem[] {
 				NavMenuSection.create( 400, "Members of Group"),
 				NavMenuItem.create(401, LoginActivity.user.getFirstName() + " " + LoginActivity.user.getLastName(), "", "ic_action_add_group", false, this)
 		};
 		
-		NavDrawerItem[] menu = menuList.toArray(new NavDrawerItem[menuList.size()]);
-
+		
 		navDrawerActivityConfiguration = new NavDrawerActivityConfiguration();
 		navDrawerActivityConfiguration.setMainLayout(R.layout.activity_main);
 		navDrawerActivityConfiguration.setDrawerLayoutId(R.id.drawer_layout);

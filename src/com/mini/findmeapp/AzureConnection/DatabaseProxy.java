@@ -11,6 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import android.content.Context;
 import android.util.Log;
 import android.util.Pair;
+import android.widget.Toast;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceQuery;
@@ -24,10 +25,12 @@ import com.mini.findmeapp.Service.UsersLocations;
 public class DatabaseProxy {
 	
 	private MobileServiceClient mClient;
+	private Context mContext;
 	
 	//Konstruktor DatabaseProxy. Context to np. MainActivity
 	public DatabaseProxy(Context context)
 	{
+		mContext = context;
 		//Utworzenie klienta us³ug Azure
         try 
         {
@@ -166,6 +169,16 @@ public class DatabaseProxy {
 												
 												usersGroups.insert(usersgroups, onInsertCallback);
 											}
+											else
+											{
+												//TODO:fix this below - debug
+												CharSequence text = "Wrong password";
+												int duration = Toast.LENGTH_SHORT;
+												Log.i("service", "xxx WRONG PASSWD");
+												Toast toast = Toast.makeText(mContext.getApplicationContext(), text, duration);
+												toast.show();
+												
+											}
 										}
 									}
 								}
@@ -175,6 +188,55 @@ public class DatabaseProxy {
 				}
 			});
 	}
+	
+	//Metoda dodaje U¿ytkownika do grupy znaj¹c jej nazwê
+	public void addUserToGroupByName(final String userFacebookId, final String groupName, final String password, final TableOperationCallback<UsersGroups> onInsertCallback)
+	{
+		final MobileServiceTable<Users> usersTable = mClient.getTable(Users.class);
+		
+		usersTable.where().field("facebookId").eq(userFacebookId).execute(new TableQueryCallback<Users>() 
+		{
+			@Override
+			public void onCompleted(List<Users> result, int count, Exception exception,ServiceFilterResponse filter) 
+			{
+				
+				if(exception == null )
+				{
+					for(final Users user : result)
+					{
+						final MobileServiceTable<Groups> groups = mClient.getTable(Groups.class);
+						
+						groups.where().field("name").eq(groupName).select("password", "isPrivate", "Id").execute(new TableQueryCallback<Groups>() 
+						{
+							
+							@Override
+							public void onCompleted(List<Groups> arg0, int arg1, Exception arg2,
+									ServiceFilterResponse arg3) 
+							{
+								if(arg2 == null)
+								{
+									for(Groups group : arg0)
+									{
+										MobileServiceTable<UsersGroups> usersGroups = mClient.getTable(UsersGroups.class);
+										if((group.isPrivate && group.password.equals(password)) || !group.isPrivate)
+										{
+											UsersGroups usersgroups = new UsersGroups();
+											usersgroups.groupId = group.Id;
+											usersgroups.userId = user.Id;
+
+											usersGroups.insert(usersgroups, onInsertCallback);
+										}
+											
+									}
+								}
+							}
+						});
+					}
+				}
+			}
+		});
+	}
+	
 
 	//Metoda zwraca wszystkie grupy do których nale¿y u¿ytkownik o podanym facebookId
 	//Wywo³uje metodê callback dla ka¿dej znalezionej grupy
@@ -216,51 +278,7 @@ public class DatabaseProxy {
 		
 		
 	}
-	
-	//Metoda zwraca wszystkie grupy do których nale¿y u¿ytkownik o podanym facebookId
-		//Wywo³uje metodê callback dla ka¿dej znalezionej grupy
-		public void getUserGroupsWithLock(final String userFacebookId, final TableQueryCallback<Groups> callback, final ReentrantLock lock)
-		{
-			
-			MobileServiceTable<Users> users = mClient.getTable(Users.class);
-			users.where().field("facebookId").eq(userFacebookId).select("Id").execute(new TableQueryCallback<Users>() {
-				
-				@Override
-				public void onCompleted(List<Users> arg0, int arg1, Exception arg2,
-						ServiceFilterResponse arg3) {
-					
-					lock.lock();
-					Log.i("service", "LOCk 1");
-					
-					if( arg2 == null)
-					{
-						for(Users user : arg0)
-						{
-							MobileServiceTable<UsersGroups> usersGroups = mClient.getTable(UsersGroups.class);
-							final MobileServiceTable<Groups> groupsInAzure = mClient.getTable(Groups.class);
-							
-							usersGroups.where().field("userId").eq(user.Id).select("groupId").execute(new TableQueryCallback<UsersGroups>() {
-								
-								@Override
-								public void onCompleted(List<UsersGroups> arg0, int arg1, Exception arg2,
-										ServiceFilterResponse arg3) {
-									if(arg2 == null)
-									{
-										for(UsersGroups item : arg0)
-										{
-											groupsInAzure.where().field("Id").eq(item.groupId).select("password", "isPrivate", "Id", "name", "description").execute(callback);
-										}
-									}
-								}
-							});
-						}
-						
-					}
-					
-				}
-			});
-		}
-	
+
 	//Metoda dodaje Event do grupy, zak³ada, ¿e jeœli user ma groupId to jest jej cz³onkiem i groupId jest poprawne ( prawdopodobnie
 	// pochodzi z metody getUserGroups lub getPublicGroups )
 	public void addEvent(final String groupId, String eventName, String eventDescription, double latitude, double longitude, 

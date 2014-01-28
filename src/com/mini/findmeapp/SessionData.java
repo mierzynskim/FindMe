@@ -10,6 +10,7 @@ public class SessionData {
 	private static final String CAPTION_KEY = "CAPTION";
 	private static final String GROUP_KEY = "GROUP";
 	private static final String EVENT_KEY = "EVENT";
+	private static final String EVENT_NULL = "EVENT_NULL_ID";
 	
 	private final SharedPreferences mSharedPreferences;
 	
@@ -39,6 +40,7 @@ public class SessionData {
 	{
 		SharedPreferences.Editor editor = mSharedPreferences.edit();
 		editor.putString(GROUP_KEY, groupId);
+		editor.putString(EVENT_KEY, EVENT_NULL);
 		editor.commit();
 	}
 	

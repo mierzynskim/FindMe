@@ -89,6 +89,23 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mini.findmeapp.AddEventActivity" />
         </activity>
+        <activity
+            android:name="com.mini.findmeapp.AddUserToGroupMainActivity"
+            android:label="@string/title_activity_add_user_to_group_main"
+            android:parentActivityName="com.mini.findmeapp.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mini.findmeapp.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.mini.findmeapp.JoinPrivateGroupActivity"
+            android:label="@string/title_activity_join_private_group"
+            android:parentActivityName="com.mini.findmeapp.AddUserToGroupMainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mini.findmeapp.AddUserToGroupMainActivity" />
+        </activity>
+
     </application>
 
 </manifest>
