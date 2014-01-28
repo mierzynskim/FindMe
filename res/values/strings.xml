@@ -28,7 +28,7 @@
     <string name="title_activity_join_private_group">JoinPrivateGroupActivity</string>
     <string name="groupName">Group name</string>
     <string name="password">Password</string>
-    <string name="password">Join</string>
+    <string name="join">Join</string>
     <string name="title_activity_join_public_group_avtivity">JoinPublicGroupAvtivity</string>
     <string name="hello_world">Hello world!</string>
 

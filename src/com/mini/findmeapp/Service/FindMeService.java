@@ -7,7 +7,6 @@ import java.util.TimerTask;
 import com.facebook.widget.LoginButton;
 import com.google.android.gms.maps.MapView;
 import com.microsoft.windowsazure.mobileservices.*;
-import com.mini.findmeapp.R;
 
 import android.app.Service;
 import android.content.Intent;
