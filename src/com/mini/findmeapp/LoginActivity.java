@@ -27,7 +27,7 @@ public class LoginActivity extends FragmentActivity {
 	public static final String USER_INFO = "UserInfo";
 
     private UiLifecycleHelper uiHelper;
-	protected static GraphUser user;
+	public static GraphUser user;
 	private String userId; 
 
     private Session.StatusCallback callback = new Session.StatusCallback() {

@@ -141,8 +141,8 @@ int drawable ic_plusone_small_off_client 0x7f020041
 int drawable ic_plusone_standard_off_client 0x7f020042
 int drawable ic_plusone_tall_off_client 0x7f020043
 int drawable navdrawer_selector 0x7f020044
-int id action_settings 0x7f06003c
-int id action_websearch 0x7f06003d
+int id action_settings 0x7f06003e
+int id action_websearch 0x7f06003f
 int id authButton 0x7f06001b
 int id com_facebook_login_activity_progress_bar 0x7f060024
 int id com_facebook_picker_activity_circle 0x7f060023
@@ -172,6 +172,7 @@ int id endHour 0x7f06000d
 int id eventDesctibtion 0x7f060008
 int id eventLocation 0x7f060009
 int id eventName 0x7f060007
+int id firstLine 0x7f06003d
 int id groupDescribtion 0x7f060011
 int id groupName 0x7f06000f
 int id groupPassword 0x7f060010
@@ -194,6 +195,7 @@ int id privateGroupPassword 0x7f060017
 int id publicGroupsList 0x7f060019
 int id right_drawer 0x7f06001f
 int id satellite 0x7f060002
+int id secondLine 0x7f06003c
 int id section_label 0x7f060037
 int id small 0x7f060005
 int id startDate 0x7f06000a
@@ -230,6 +232,7 @@ int layout fragment_add_group_dummy 0x7f030016
 int layout google_maps_fragment 0x7f030017
 int layout navdrawer_item 0x7f030018
 int layout navdrawer_section 0x7f030019
+int layout public_group_template 0x7f03001a
 int menu add_group 0x7f0c0000
 int menu add_new_group 0x7f0c0001
 int menu add_user_to_group_main 0x7f0c0002

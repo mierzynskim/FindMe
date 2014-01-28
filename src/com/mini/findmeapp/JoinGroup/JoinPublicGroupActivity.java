@@ -1,4 +1,4 @@
-package com.mini.findmeapp;
+package com.mini.findmeapp.JoinGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,9 +6,15 @@ import java.util.List;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 import com.microsoft.windowsazure.mobileservices.TableQueryCallback;
+import com.mini.findmeapp.LoginActivity;
+import com.mini.findmeapp.R;
+import com.mini.findmeapp.SessionData;
 import com.mini.findmeapp.AzureConnection.DatabaseProxy;
 import com.mini.findmeapp.AzureConnection.Groups;
 import com.mini.findmeapp.AzureConnection.UsersGroups;
+import com.mini.findmeapp.R.id;
+import com.mini.findmeapp.R.layout;
+import com.mini.findmeapp.R.menu;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -35,6 +41,13 @@ public class JoinPublicGroupActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_join_public_group);
 		self = this;
+		
+		Context context = getApplicationContext();
+		CharSequence text = "Wait for groups to load";
+		int duration = Toast.LENGTH_SHORT;
+
+		Toast toast = Toast.makeText(context, text, duration);
+		toast.show();
 	}
 
 	@Override
@@ -55,7 +68,7 @@ public class JoinPublicGroupActivity extends Activity {
 				{
 					mPublicGroups = new ArrayList<Groups>(arg0);
 					ListView listView = (ListView)findViewById(R.id.publicGroupsList);
-					ArrayAdapter<Groups> adapter = new ArrayAdapter<Groups>(self, android.R.layout.simple_list_item_1, mPublicGroups);
+					PublicGroupsAdapter adapter = new PublicGroupsAdapter(self, mPublicGroups.toArray(new Groups[0]));
 					listView.setAdapter(adapter);
 					listView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -81,12 +94,12 @@ public class JoinPublicGroupActivity extends Activity {
 										sd.setGroupId(arg0.groupId);
 										
 										text = "You joined group";
+										
+										self.finish();
 									}
 									else
 									{
 										text = "You did not joined group. Try again";
-										Intent intent = new Intent(getApplicationContext(), JoinPublicGroupActivity.class);
-										startActivity(intent);
 									}
 									Toast toast = Toast.makeText(context, text, duration);
 									toast.show();
@@ -100,7 +113,7 @@ public class JoinPublicGroupActivity extends Activity {
 							Toast toast = Toast.makeText(context, text, duration);
 							toast.show();
 							
-							self.finish();
+							
 						}
 					});
 				}

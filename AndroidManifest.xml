@@ -90,7 +90,7 @@
                 android:value="com.mini.findmeapp.AddEventActivity" />
         </activity>
         <activity
-            android:name="com.mini.findmeapp.AddUserToGroupMainActivity"
+            android:name="com.mini.findmeapp.JoinGroup.AddUserToGroupMainActivity"
             android:label="@string/title_activity_add_user_to_group_main"
             android:parentActivityName="com.mini.findmeapp.MainActivity" >
             <meta-data
@@ -98,17 +98,17 @@
                 android:value="com.mini.findmeapp.MainActivity" />
         </activity>
         <activity
-            android:name="com.mini.findmeapp.JoinPrivateGroupActivity"
+            android:name="com.mini.findmeapp.JoinGroup.JoinPrivateGroupActivity"
             android:label="@string/title_activity_join_private_group"
-            android:parentActivityName="com.mini.findmeapp.AddUserToGroupMainActivity" >
+            android:parentActivityName="com.mini.findmeapp.JoinGroup.AddUserToGroupMainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mini.findmeapp.AddUserToGroupMainActivity" />
         </activity>
         <activity
-            android:name="com.mini.findmeapp.JoinPublicGroupActivity"
+            android:name="com.mini.findmeapp.JoinGroup.JoinPublicGroupActivity"
             android:label="@string/title_activity_join_public_group"
-            android:parentActivityName="com.mini.findmeapp.AddUserToGroupMainActivity" >
+            android:parentActivityName="com.mini.findmeapp.JoinGroup.AddUserToGroupMainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mini.findmeapp.AddUserToGroupMainActivity" />

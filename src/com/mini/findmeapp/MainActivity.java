@@ -19,6 +19,7 @@ import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.TableQueryCallback;
 import com.mini.findmeapp.AzureConnection.DatabaseProxy;
 import com.mini.findmeapp.AzureConnection.Groups;
+import com.mini.findmeapp.JoinGroup.AddUserToGroupMainActivity;
 import com.mini.findmeapp.NavigationDrawer.AbstractNavDrawerActivity;
 import com.mini.findmeapp.NavigationDrawer.NavDrawerActivityConfiguration;
 import com.mini.findmeapp.NavigationDrawer.NavDrawerAdapter;
@@ -138,7 +139,9 @@ public class MainActivity extends AbstractNavDrawerActivity {
 
 	@Override
 	protected void onNavItemSelected(int id) {
+		
 		//TODO: przy wybraniu nowego eventu zmiana info w mSessionData plus restart timera i serwisu jak w onStart
+		
 		switch ((int)id) {
 		case 101:
 //			NavDrawerItem[] menu = new NavDrawerItem[] {

@@ -169,16 +169,7 @@ public class DatabaseProxy {
 												
 												usersGroups.insert(usersgroups, onInsertCallback);
 											}
-											else
-											{
-												//TODO:fix this below - debug
-												CharSequence text = "Wrong password";
-												int duration = Toast.LENGTH_SHORT;
-												Log.i("service", "xxx WRONG PASSWD");
-												Toast toast = Toast.makeText(mContext.getApplicationContext(), text, duration);
-												toast.show();
-												
-											}
+
 										}
 									}
 								}
@@ -226,9 +217,19 @@ public class DatabaseProxy {
 
 											usersGroups.insert(usersgroups, onInsertCallback);
 										}
+										else
+										{
+											CharSequence text = "Wrong password";
+											int duration = Toast.LENGTH_SHORT;
+											Log.i("service", "xxx WRONG PASSWD");
+											Toast toast = Toast.makeText(mContext.getApplicationContext(), text, duration);
+											toast.show();
+											
+										}
 											
 									}
 								}
+								
 							}
 						});
 					}

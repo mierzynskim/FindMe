@@ -1,4 +1,9 @@
-package com.mini.findmeapp;
+package com.mini.findmeapp.JoinGroup;
+
+import com.mini.findmeapp.R;
+import com.mini.findmeapp.R.id;
+import com.mini.findmeapp.R.layout;
+import com.mini.findmeapp.R.menu;
 
 import android.os.Bundle;
 import android.app.Activity;

@@ -1,9 +1,15 @@
-package com.mini.findmeapp;
+package com.mini.findmeapp.JoinGroup;
 
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
+import com.mini.findmeapp.LoginActivity;
+import com.mini.findmeapp.R;
+import com.mini.findmeapp.SessionData;
 import com.mini.findmeapp.AzureConnection.DatabaseProxy;
 import com.mini.findmeapp.AzureConnection.UsersGroups;
+import com.mini.findmeapp.R.id;
+import com.mini.findmeapp.R.layout;
+import com.mini.findmeapp.R.menu;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -55,18 +61,19 @@ public class JoinPrivateGroupActivity extends Activity {
 							
 							text = "You joined group";
 							
+							JoinPrivateGroupActivity.this.finish();
+							
 						}
 						else
 						{
 							text = "You did not joined group. Try again";
-							Intent intent = new Intent(getApplicationContext(), JoinPrivateGroupActivity.class);
-							startActivity(intent);
 						}
 						
 						Toast toast = Toast.makeText(context, text, duration);
 						toast.show();
 					}
 				});
+				
 				
 				Context context = getApplicationContext();
 				CharSequence text = "Wait for confirmation";
@@ -75,7 +82,7 @@ public class JoinPrivateGroupActivity extends Activity {
 				Toast toast = Toast.makeText(context, text, duration);
 				toast.show();
 				
-				JoinPrivateGroupActivity.this.finish();
+				
 			}
 		});
 	}
