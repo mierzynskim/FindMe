@@ -46,7 +46,7 @@ public class JoinPrivateGroupActivity extends Activity {
 						CharSequence text;
 						int duration = Toast.LENGTH_SHORT;
 						
-						if(arg1 == null || arg0 == null)
+						if(arg1 == null )
 						{
 							//Dodanie u¿ytkownika do grupy
 							Log.i("service", "xxx Add user to private group " + arg0.groupId.toString());

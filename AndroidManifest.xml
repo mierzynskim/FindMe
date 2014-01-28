@@ -105,7 +105,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mini.findmeapp.AddUserToGroupMainActivity" />
         </activity>
-
+        <activity
+            android:name="com.mini.findmeapp.JoinPublicGroupActivity"
+            android:label="@string/title_activity_join_public_group"
+            android:parentActivityName="com.mini.findmeapp.AddUserToGroupMainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mini.findmeapp.AddUserToGroupMainActivity" />
+        </activity>
     </application>
 
 </manifest>

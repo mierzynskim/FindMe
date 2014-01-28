@@ -37,8 +37,8 @@ public class AddUserToGroupMainActivity extends Activity {
 			@Override
 			public void onClick(View v) 
 			{
-				// TODO Auto-generated method stub
-				
+				Intent intent = new  Intent(AddUserToGroupMainActivity.this, JoinPublicGroupActivity.class);
+				startActivityForResult(intent, REQUEST_CODE);
 			}
 		}
 		);
