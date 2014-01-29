@@ -1,10 +1,13 @@
 package com.mini.findmeapp;
 
+
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog.OnTimeSetListener;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -16,7 +19,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
@@ -45,6 +50,7 @@ public class AddEventActivity extends FragmentActivity {
 		setContentView(R.layout.activity_add_event);
 		databaseProxy = new DatabaseProxy(this);
 		mSessionData = new SessionData(getSharedPreferences(SessionData.FILE_NAME, 0));
+		event.startDate = event.endDate = new Date(0);
 		
 		setupActionBar();
 		findViewById(R.id.startDate).setOnClickListener(new OnClickListener() {
@@ -87,12 +93,15 @@ public class AddEventActivity extends FragmentActivity {
         final Button button = (Button) findViewById(R.id.submitEventButton);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-//            	EditText eventName = (EditText) findViewById(R.id.eventName);
-//            	EditText eventDescribtion = (EditText) findViewById(R.id.eventDesctibtion);
-//            	EditText event = (EditText) findViewById(R.id.groupDescribtion);
-//            	CheckBox isPrivateBox = (CheckBox) findViewById(R.id.isPrivate);
-        		databaseProxy.addEvent(mSessionData.getGroupId(), "Super event", "Opis eventu", 52.01, 28.006, "www.mini.pw.edu.pl",
-				new java.util.Date(2014,1,2), new java.util.Date(2014,3,4), new TableOperationCallback<GroupsEvents>() {
+            	EditText eventName = (EditText) findViewById(R.id.eventName);
+            	EditText eventDescribtion = (EditText) findViewById(R.id.eventDesctibtion);
+            	EditText eventUrl = (EditText) findViewById(R.id.eventUrl);
+            	
+            	
+        		databaseProxy.addEvent(mSessionData.getGroupId(), eventName.getText().toString(),
+        				eventDescribtion.getText().toString(), event.locationLatitude, event.locationLongitude,
+        				eventUrl.getText().toString(), event.startDate, event.endDate,
+        				new TableOperationCallback<GroupsEvents>() {
 					
 					@Override
 					public void onCompleted(GroupsEvents arg0, Exception arg1,
@@ -100,7 +109,16 @@ public class AddEventActivity extends FragmentActivity {
 						if(arg1 == null) {
 							Log.i("service", "Dodano Event o ID " + arg0.eventId);
 							mSessionData.setEventId(arg0.eventId);
+							
+							Context context = getApplicationContext();
+							CharSequence text = "Event successfully added";
+							int duration = Toast.LENGTH_SHORT;
+
+							Toast toast = Toast.makeText(context, text, duration);
+							toast.show();
+							
 							AddEventActivity.this.finish();
+							
 						}
 						
 					}
@@ -112,12 +130,11 @@ public class AddEventActivity extends FragmentActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		  if (requestCode == 11) {
 		     if(resultCode == RESULT_OK) {      
-		    	 Bundle extras = getIntent().getExtras();
-		    	 Double latitude = extras.getDouble("latitude");
-		    	 Double longitude = extras.getDouble("longitude");  
+		    	 Bundle extras = data.getExtras();
+		    	 event.locationLatitude = extras.getDouble("latitude");
+		    	 event.locationLongitude = extras.getDouble("longitude");  
 		    	 Button button = (Button) findViewById(R.id.eventLocation);
-		    	 Log.i("result", latitude.toString());
-		    	 button.setText(latitude.toString() + longitude.toString());
+		    	 button.setText(String.valueOf(event.locationLatitude) + " : " + String.valueOf(event.locationLongitude));
 		     }
 
 		  }

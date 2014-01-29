@@ -17,6 +17,14 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:hint="@string/event_desctibtion" />
+    
+    <EditText
+        android:id="@+id/eventUrl"
+        android:inputType="textUri"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:hint="@string/event_url" />
 
     <Button
         android:id="@+id/eventLocation"

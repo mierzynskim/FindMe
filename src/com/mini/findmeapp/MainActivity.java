@@ -74,6 +74,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 					public void onCompleted(List<UsersLocations> arg0, int arg1,
 							Exception arg2, ServiceFilterResponse arg3) {
 						if (arg0 != null){
+							mMap.clear();
 							for (UsersLocations usersLocations : arg0) {
 								Log.i("service", String.valueOf(usersLocations.userLatitude) );
 								mMap.addMarker(new MarkerOptions().position(new LatLng(usersLocations.userLatitude,

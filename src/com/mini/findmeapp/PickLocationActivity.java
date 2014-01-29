@@ -30,9 +30,8 @@ public class PickLocationActivity extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 				Intent returnIntent = new Intent();
-				Bundle extras = new Bundle();
-				extras.putDouble("latitude", location.latitude);
-				extras.putDouble("longitude", location.longitude);
+				returnIntent.putExtra("latitude", location.latitude);
+				returnIntent.putExtra("longitude", location.longitude);
 				Log.i("tap", location.latitude + " " + location.longitude);
 				setResult(RESULT_OK, returnIntent);  
 				PickLocationActivity.this.finish();

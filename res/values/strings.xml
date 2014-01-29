@@ -11,6 +11,7 @@
     <string name="title_activity_add_event">Add new event</string>
     <string name="event_name">Event name</string>
     <string name="event_desctibtion">Desctibtion</string>
+    <string name="event_url">Web page</string>
     <string name="event_location">Location</string>
     <string name="event_start_date">Start date</string>
     <string name="event_start_hour">10:00</string>
