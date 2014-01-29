@@ -1,5 +1,6 @@
 package com.mini.findmeapp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -144,14 +145,18 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		//TODO: przy wybraniu nowego eventu zmiana info w mSessionData plus restart timera i serwisu jak w onStart
 		
 		switch ((int)id) {
-		case 101:
+		case 102:
 //			NavDrawerItem[] menu = new NavDrawerItem[] {
-//					NavMenuSection.create( 100, "Group 1"),
-//					NavMenuItem.create(101,"Event 1", "Group 1", "ic_action_new_event", true, this),
-//					NavMenuItem.create(102,"Event 2","Group 1", "ic_action_new_event", true, this),
-//					NavMenuSection.create( 300, "Settings"),
-//					NavMenuItem.create(301,"App Settings", "", "ic_action_settings", false, this),
-//			};
+//			NavMenuSection.create( 100, "Group 1"),
+//			NavMenuItem.create(101,"Event 1", "Group 1", "ic_action_new_event", true, this),
+//			NavMenuItem.create(102,"Event 2","Group 1", "ic_action_new_event", true, this),
+//			NavMenuSection.create( 300, "Settings"),
+//			NavMenuItem.create(301,"App Settings", "", "ic_action_settings", false, this),
+//		};
+//			MainActivity.this.appendToLeftMenu(menu);
+			break;
+		case 101:
+
 //			
 //			addGroup(menu, null);
 			Intent intentGroup = new Intent(MainActivity.this, AddEventActivity.class);
@@ -209,7 +214,6 @@ public class MainActivity extends AbstractNavDrawerActivity {
 				new NavDrawerAdapter(this, R.layout.navdrawer_item, menu ));
 		navDrawerActivityConfiguration.setBaseAdapterRight(
 				new NavDrawerAdapter(this, R.layout.navdrawer_item, menu2 ));
-		
 		
 	}
 }

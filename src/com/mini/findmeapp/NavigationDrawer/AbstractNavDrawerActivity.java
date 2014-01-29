@@ -85,6 +85,49 @@ public abstract class AbstractNavDrawerActivity extends FragmentActivity {
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
+    //TODO Change inefficient arrays to lists
+    public void redrawLeftMenu(NavDrawerItem[] menu)
+    {
+    	navConf.setNavItemsLeft(menu);
+    	navConf.setBaseAdapterLeft(
+				new NavDrawerAdapter(this, R.layout.navdrawer_item, menu ));
+		refreshDrawer();
+		navConf.getBaseAdapterLeft().notifyDataSetChanged();
+    }
+    
+    public void appendToLeftMenu(NavDrawerItem[] menu)
+    {
+    	NavDrawerItem[] newMenu = new NavDrawerItem[menu.length + navConf.getNavItemsLeft().length];
+    	System.arraycopy(menu, 0, newMenu, 0, menu.length);
+    	System.arraycopy(navConf.getNavItemsLeft(), 0, newMenu, menu.length, navConf.getNavItemsLeft().length);
+    	navConf.setNavItemsLeft(newMenu);
+    	navConf.setBaseAdapterLeft(
+				new NavDrawerAdapter(this, R.layout.navdrawer_item, newMenu ));
+		refreshDrawer();
+		navConf.getBaseAdapterLeft().notifyDataSetChanged();
+    }
+    
+    public void redrawRightMenu(NavDrawerItem[] menu)
+    {
+    	navConf.setNavItemsRight(menu);
+    	navConf.setBaseAdapterRight(
+				new NavDrawerAdapter(this, R.layout.navdrawer_item, menu ));
+		refreshDrawer();
+		navConf.getBaseAdapterRight().notifyDataSetChanged();
+    }
+    
+    public void appendToRightMenu(NavDrawerItem[] menu)
+    {
+    	NavDrawerItem[] newMenu = new NavDrawerItem[menu.length + navConf.getNavItemsRight().length];
+    	System.arraycopy(menu, 0, newMenu, 0, menu.length);
+    	System.arraycopy(navConf.getNavItemsLeft(), 0, newMenu, menu.length, navConf.getNavItemsLeft().length);
+    	navConf.setNavItemsRight(newMenu);
+    	navConf.setBaseAdapterRight(
+				new NavDrawerAdapter(this, R.layout.navdrawer_item, newMenu ));
+		refreshDrawer();
+		navConf.getBaseAdapterRight().notifyDataSetChanged();
+    }
+    
     
     protected void initDrawerShadow() {
         mDrawerLayout.setDrawerShadow(navConf.getDrawerShadow(), GravityCompat.START);
