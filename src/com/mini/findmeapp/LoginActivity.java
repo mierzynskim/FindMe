@@ -146,5 +146,6 @@ public class LoginActivity extends FragmentActivity {
     public void onDestroy() {
         super.onDestroy();
         uiHelper.onDestroy();
+        MainActivity.wasChange = true;
     }
 }
