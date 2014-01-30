@@ -1,6 +1,7 @@
 package com.mini.findmeapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
@@ -46,6 +48,14 @@ public class AddGroupActivity extends Activity {
     					Log.i("service", "xxx GROUP ADD OK");
     					mSessionData.setGroupId(arg0.Id);
     					databaseProxy.addUserToGroup(LoginActivity.user.getId(), arg0.Id, groupPassword.getText().toString(), null);
+    					MainActivity.wasChange = true;
+    					Context context = getApplicationContext();
+						CharSequence text = "Group successfully added";
+						int duration = Toast.LENGTH_SHORT;
+
+						Toast toast = Toast.makeText(context, text, duration);
+						toast.show();
+						
     					AddGroupActivity.this.finish();
     					//mGroupId = arg0.Id;
     				}

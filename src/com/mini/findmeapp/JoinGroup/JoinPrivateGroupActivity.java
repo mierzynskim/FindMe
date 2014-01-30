@@ -3,6 +3,7 @@ package com.mini.findmeapp.JoinGroup;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 import com.mini.findmeapp.LoginActivity;
+import com.mini.findmeapp.MainActivity;
 import com.mini.findmeapp.R;
 import com.mini.findmeapp.SessionData;
 import com.mini.findmeapp.AzureConnection.DatabaseProxy;
@@ -58,7 +59,7 @@ public class JoinPrivateGroupActivity extends Activity {
 							Log.i("service", "xxx Add user to private group " + arg0.groupId.toString());
 							SessionData sd = new SessionData(getSharedPreferences(SessionData.FILE_NAME, 0));
 							sd.setGroupId(arg0.groupId);
-							
+							MainActivity.wasChange = true;
 							text = "You joined group";
 							
 							JoinPrivateGroupActivity.this.finish();

@@ -108,6 +108,15 @@ public class DatabaseProxy {
 						
 							groupsTable.insert(groups, onGroupAdd);
 						}
+						else
+							if(item.groupCounter == 0)
+							{
+								CharSequence text = "You reached your new groups limit.";
+								int duration = Toast.LENGTH_SHORT;
+								Log.i("service", "xxx WRONG PASSWD");
+								Toast toast = Toast.makeText(mContext.getApplicationContext(), text, duration);
+								toast.show();
+							}
 					}
 				else
 					Log.i("service", "xxx USER BY ID NIE OK OK");
@@ -285,6 +294,8 @@ public class DatabaseProxy {
 	public void addEvent(final String groupId, String eventName, String eventDescription, double latitude, double longitude, 
 			String eventUrl, Date start, Date end,final TableOperationCallback<GroupsEvents> callback)
 	{
+		//TODO: add event check event counter
+		
 		final MobileServiceTable<GroupsEvents> groupsEvents = mClient.getTable(GroupsEvents.class);
 		MobileServiceTable<Events> events = mClient.getTable(Events.class);
 		

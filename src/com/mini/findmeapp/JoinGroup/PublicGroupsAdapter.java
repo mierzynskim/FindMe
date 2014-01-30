@@ -34,8 +34,8 @@ public class PublicGroupsAdapter extends ArrayAdapter<Groups> {
 		TextView firstLine = (TextView)row.findViewById(R.id.firstLine);
 		TextView secondLine = (TextView)row.findViewById(R.id.secondLine);
 		
-		firstLine.setText(group.description);
-		secondLine.setText(group.name);
+		firstLine.setText(group.name);
+		secondLine.setText(group.description);
 		
 		return row;
 	}

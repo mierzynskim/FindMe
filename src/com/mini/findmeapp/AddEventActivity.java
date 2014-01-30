@@ -110,6 +110,8 @@ public class AddEventActivity extends FragmentActivity {
 							Log.i("service", "Dodano Event o ID " + arg0.eventId);
 							mSessionData.setEventId(arg0.eventId);
 							
+							MainActivity.wasChange = true;
+							
 							Context context = getApplicationContext();
 							CharSequence text = "Event successfully added";
 							int duration = Toast.LENGTH_SHORT;

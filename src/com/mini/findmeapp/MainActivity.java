@@ -1,30 +1,32 @@
 package com.mini.findmeapp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
+import android.widget.EditText;
 
 import com.facebook.widget.LoginButton;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.TableQueryCallback;
 import com.mini.findmeapp.AzureConnection.DatabaseProxy;
+import com.mini.findmeapp.AzureConnection.Events;
 import com.mini.findmeapp.AzureConnection.Groups;
 import com.mini.findmeapp.JoinGroup.AddUserToGroupMainActivity;
 import com.mini.findmeapp.NavigationDrawer.AbstractNavDrawerActivity;
 import com.mini.findmeapp.NavigationDrawer.NavDrawerActivityConfiguration;
 import com.mini.findmeapp.NavigationDrawer.NavDrawerAdapter;
 import com.mini.findmeapp.NavigationDrawer.NavDrawerItem;
+import com.mini.findmeapp.NavigationDrawer.NavItemsManager;
 import com.mini.findmeapp.NavigationDrawer.NavMenuItem;
 import com.mini.findmeapp.NavigationDrawer.NavMenuSection;
 import com.mini.findmeapp.Service.ServiceProxy;
@@ -46,6 +48,12 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		
 	//Obiekt mapy
 	private GoogleMap mMap;
+	
+	//Manager itemów w lewym menu
+	private NavItemsManager mNavItemsManager;
+	
+	//Czy by³a zmiana
+	public static Boolean wasChange = true;
 
 
 	@Override
@@ -63,9 +71,13 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		
 		//Utworzenie SessionData
 		mSessionData = new SessionData(getSharedPreferences(SessionData.FILE_NAME, 0));
-		//Wystartowanie serwisu
+		
+		//Utworzenie serwisu
 		mServiceProxy = new ServiceProxy(this, LoginActivity.user.getId(), mSessionData.getEventId(),
 				mSessionData.getGroupId(), mSessionData.getCaption());
+		
+		//Utworzenie ItemsManagera
+		mNavItemsManager = new NavItemsManager(this);
 		
 		//Utworzenie timera
 		mTimer = new Timer(MainActivity.this, 10, mSessionData.getGroupId(),
@@ -76,12 +88,17 @@ public class MainActivity extends AbstractNavDrawerActivity {
 							Exception arg2, ServiceFilterResponse arg3) {
 						if (arg0 != null){
 							mMap.clear();
+							ArrayList<NavDrawerItem> captionList = new ArrayList<NavDrawerItem>();
+							captionList.add(NavMenuSection.create(10,"Members captions"));
 							for (UsersLocations usersLocations : arg0) {
 								Log.i("service", String.valueOf(usersLocations.userLatitude) );
 								mMap.addMarker(new MarkerOptions().position(new LatLng(usersLocations.userLatitude,
 										usersLocations.userLongitude)));
+								captionList.add(NavMenuSection.create(10, usersLocations.caption));
 								
 							}
+							
+							redrawRightMenu(captionList.toArray(new NavDrawerItem[0]));
 							
 						}
 						Log.i("TIMER", "TIMER COMPLETE");
@@ -114,6 +131,11 @@ public class MainActivity extends AbstractNavDrawerActivity {
     	mServiceProxy.ChangeGroup(mSessionData.getGroupId(), mSessionData.getEventId());
     	
     	//TODO:uaktualnienie bocznego panelu
+    	if(wasChange)
+    	{
+    		refreshMenu();
+    		wasChange = false;
+    	}
 	}
 	
 	//Przy zatrzymaniu MainActivity zatrzymujemy te¿ Timer
@@ -144,59 +166,82 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		
 		//TODO: przy wybraniu nowego eventu zmiana info w mSessionData plus restart timera i serwisu jak w onStart
 		
-		switch ((int)id) {
-		case 102:
-//			NavDrawerItem[] menu = new NavDrawerItem[] {
-//			NavMenuSection.create( 100, "Group 1"),
-//			NavMenuItem.create(101,"Event 1", "Group 1", "ic_action_new_event", true, this),
-//			NavMenuItem.create(102,"Event 2","Group 1", "ic_action_new_event", true, this),
-//			NavMenuSection.create( 300, "Settings"),
-//			NavMenuItem.create(301,"App Settings", "", "ic_action_settings", false, this),
-//		};
-//			MainActivity.this.appendToLeftMenu(menu);
-			break;
-		case 101:
+		//Wybrano coœ z sekcji Settings
+		if( id < 100)
+		{
+			switch (id) {
+				
+				case 20:
+					Intent intentGroup = new Intent(MainActivity.this, AddGroupActivity.class);
+					startActivity(intentGroup);
+					break;
+				case 30:
+					Intent intentEvent = new Intent(MainActivity.this, AddEventActivity.class);
+					startActivity(intentEvent);
+					break;
+				case 40:
+					Intent intentAddUser = new Intent(MainActivity.this, AddUserToGroupMainActivity.class);
+					startActivity(intentAddUser);
+					break;
+				case 50:
+					Intent intentSetting = new Intent(MainActivity.this, SettingsActivity.class);
+					startActivity(intentSetting);
+					break;
+				case 60:
+					
+					AlertDialog.Builder builder = new AlertDialog.Builder(this);
+					builder.setTitle("Type new caption");
 
-//			
-//			addGroup(menu, null);
-			Intent intentGroup = new Intent(MainActivity.this, AddEventActivity.class);
-			startActivity(intentGroup);
-			break;
-		case 301:
-			Intent intentSetting = new Intent(MainActivity.this, SettingsActivity.class);
-			startActivity(intentSetting);
-			break;
-		case 302:
-			Intent intent = new Intent(MainActivity.this, AddGroupActivity.class);
-			startActivity(intent);
-			break;
-		case 501:
-			Intent intentAddUser = new Intent(MainActivity.this, AddUserToGroupMainActivity.class);
-			startActivity(intentAddUser);
-			break;
+					// Set up the input
+					final EditText input = new EditText(this);
+					// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+					input.setInputType(InputType.TYPE_CLASS_TEXT );
+					builder.setView(input);
+
+					// Set up the buttons
+					builder.setPositiveButton("OK", new DialogInterface.OnClickListener() { 
+					    @Override
+					    public void onClick(DialogInterface dialog, int which) {
+					        mSessionData.setCaption(input.getText().toString());
+					        mServiceProxy.ChangeCaption(mSessionData.getCaption());
+					    }
+					});
+					builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+					    @Override
+					    public void onClick(DialogInterface dialog, int which) {
+					        dialog.cancel();
+					    }
+					});
+
+					builder.show();
+					break;
+			}
+		}
+		else
+		{
+			Events event = mNavItemsManager.getEventAt(id);
+			Groups group = mNavItemsManager.getGroupAt(id);
+			
+			//Zmiana aktualnej grupy i eventu
+			mSessionData.setGroupId(group.Id);
+			mSessionData.setEventId(event.Id);
+			
+			//Wystartowanie timera
+	    	mTimer.ChangeParameters(mSessionData.getGroupId(), mSessionData.getEventId());
+	    	mTimer.StartTimer();
+	    	
+	    	//Uaktualnienie informacji o grupie i evencie
+	    	mServiceProxy.ChangeGroup(mSessionData.getGroupId(), mSessionData.getEventId());
+		
 		}
 
 	};
 	
 	private void initMenu() {
 		
-		NavDrawerItem[] menu = new NavDrawerItem[] {
-				NavMenuSection.create( 100, "Group 1"),
-				NavMenuItem.create(102,"Event 1", "Group 1", "ic_action_new_event", true, this),
-				NavMenuItem.create(103,"Event 2","Group 1", "ic_action_new_event", true, this),
-				NavMenuSection.create( 200, "Group 2"),
-				NavMenuItem.create(201,"Event 1","Group 2", "ic_action_new_event", true, this),
-				NavMenuItem.create(202,"Event 2","Group 2", "ic_action_new_event", true, this),
-				NavMenuSection.create( 300, "Settings"),
-				NavMenuItem.create(302,"Add new group", "", "ic_action_new", false, this),
-				NavMenuItem.create(101,"Add event", "", "ic_action_add_group", false, this),
-				NavMenuItem.create(501,"Join existing group", "", "ic_action_add_group", false, this),
-				NavMenuItem.create(301,"App Settings", "", "ic_action_settings", false, this),
-		};
+		NavDrawerItem[] menu = new NavDrawerItem[0];
 		
 		NavDrawerItem[] menu2 = new NavDrawerItem[] {
-				NavMenuSection.create( 400, "Members of Group"),
-				NavMenuItem.create(401, LoginActivity.user.getFirstName() + " " + LoginActivity.user.getLastName(), "", "ic_action_add_group", false, this)
 		};
 		
 		
@@ -215,5 +260,53 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		navDrawerActivityConfiguration.setBaseAdapterRight(
 				new NavDrawerAdapter(this, R.layout.navdrawer_item, menu2 ));
 		
+		
 	}
+	
+	private void refreshMenu()
+	{
+		final DatabaseProxy db = new DatabaseProxy(this);
+		mNavItemsManager = new  NavItemsManager(this);
+        
+        db.getUserGroups(LoginActivity.user.getId(), new TableQueryCallback<Groups>() {
+                
+                @Override
+                public void onCompleted(List<Groups> groups, int count, Exception exception,
+                                ServiceFilterResponse filter) {
+                        
+                                if(exception == null)
+                                {
+                                        for(Groups group : groups)
+                                        {
+                                        	mNavItemsManager.addGroup(group);
+                                        	
+                                        	final Groups tmp = group;
+                                        	db.getAllEvents(group.Id, new TableQueryCallback<Events>() {
+												
+												@Override
+												public void onCompleted(List<Events> arg0, int arg1, Exception arg2,
+														ServiceFilterResponse arg3) {
+													
+													if(arg2 == null)
+													{
+														for(Events event : arg0)
+														{
+															mNavItemsManager.addEvent(event, tmp);
+														}
+														
+														redrawLeftMenu(mNavItemsManager.getItemsArray());
+													}
+													
+												}
+											});
+                                        }
+                                        
+                                        redrawLeftMenu(mNavItemsManager.getItemsArray());
+                                }
+                                
+                                
+                }
+        });
+	}
+	
 }
