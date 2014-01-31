@@ -55,6 +55,8 @@ public class LoginActivity extends FragmentActivity {
 
                         	Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        	MainActivity.wasChange = true;
+                        	Log.i("service", "MAIN ACTIVITY STARTING");
                         	startActivity(intent);
                         	finish();
                         }   
@@ -146,6 +148,7 @@ public class LoginActivity extends FragmentActivity {
     public void onDestroy() {
         super.onDestroy();
         uiHelper.onDestroy();
+        Log.i("service", "LOGIN ACTIVITY DESTROY");
         MainActivity.wasChange = true;
     }
 }

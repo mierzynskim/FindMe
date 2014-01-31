@@ -63,6 +63,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		initMenu();
 		
 		super.onCreate(savedInstanceState);
+		Log.i("service", "MAIN ACTIVITY ON CREATE");
 		
 		//setContentView(R.layout.activity_main);
 		getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new GoogleMapFragment()).commit();
@@ -111,6 +112,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 	@Override
 	public void onStart() {
 	    super.onStart();
+	    Log.i("service", "MAIN ACTIVITY ON START");
     	MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
     	mMap = mapFragment.getMap();
 
@@ -265,6 +267,8 @@ public class MainActivity extends AbstractNavDrawerActivity {
 	
 	private void refreshMenu()
 	{
+		
+		Log.i("service", "REFRESH START");
 		final DatabaseProxy db = new DatabaseProxy(this);
 		mNavItemsManager = new  NavItemsManager(this);
         
@@ -307,6 +311,8 @@ public class MainActivity extends AbstractNavDrawerActivity {
                                 
                 }
         });
+	
+        redrawLeftMenu(mNavItemsManager.getItemsArray());
 	}
 	
 }
