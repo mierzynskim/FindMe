@@ -17,6 +17,7 @@ import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 import com.mini.findmeapp.AzureConnection.DatabaseProxy;
 import com.mini.findmeapp.AzureConnection.Groups;
+import com.mini.findmeapp.AzureConnection.UsersGroups;
 
 public class AddGroupActivity extends Activity {
 	
@@ -47,17 +48,26 @@ public class AddGroupActivity extends Activity {
     				{
     					Log.i("service", "xxx GROUP ADD OK");
     					mSessionData.setGroupId(arg0.Id);
-    					databaseProxy.addUserToGroup(LoginActivity.user.getId(), arg0.Id, groupPassword.getText().toString(), null);
-    					MainActivity.wasChange = true;
-    					Context context = getApplicationContext();
-						CharSequence text = "Group successfully added";
-						int duration = Toast.LENGTH_SHORT;
+    					databaseProxy.addUserToGroup(LoginActivity.user.getId(), arg0.Id, groupPassword.getText().toString(), new TableOperationCallback<UsersGroups>() {
+							
+							@Override
+							public void onCompleted(UsersGroups arg0, Exception arg1,
+									ServiceFilterResponse arg2) {
+								if(arg1 == null)
+								{
+									MainActivity.wasChange = true;
+			    					Context context = getApplicationContext();
+									CharSequence text = "Group successfully added";
+									int duration = Toast.LENGTH_SHORT;
 
-						Toast toast = Toast.makeText(context, text, duration);
-						toast.show();
-						
-    					AddGroupActivity.this.finish();
-    					//mGroupId = arg0.Id;
+									Toast toast = Toast.makeText(context, text, duration);
+									toast.show();
+									
+			    					AddGroupActivity.this.finish();
+								}
+								
+							}
+						});
     				}
     				else
     					Log.i("service", "xxx GROUP NIE ADD OK");

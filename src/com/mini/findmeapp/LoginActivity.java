@@ -93,18 +93,6 @@ public class LoginActivity extends FragmentActivity {
 					Log.i("service", "xxx USER ADD NIE OK " + arg1.getMessage());		
 			}
 		});
-		db.addUserToGroup(user.getId(), "F9898B0B-DF9E-4438-B8C8-3B4269F6E491" , "tajne2", new TableOperationCallback<UsersGroups>() {
-        	
-			@Override
-			public void onCompleted(UsersGroups arg0, Exception arg1,
-					ServiceFilterResponse arg2) {
-				// TODO Auto-generated method stub
-				if(arg1 == null)
-					Log.i("service", "User dodany do grupy");
-				else
-					Log.i("service", "User NIE dodany do grupy");				
-			}
-		});
 	}
 
 
