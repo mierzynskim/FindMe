@@ -130,7 +130,10 @@ public class MainActivity extends AbstractNavDrawerActivity {
     	mTimer.StartTimer();
     	
     	//Uaktualnienie informacji o grupie i evencie
-    	mServiceProxy.ChangeGroup(mSessionData.getGroupId(), mSessionData.getEventId());
+    	if(mServiceProxy.getmEventId() != mSessionData.getEventId() || mServiceProxy.getmGroupId() != mSessionData.getGroupId() || 
+    			mServiceProxy.getmCaption()!= mSessionData.getCaption())
+    		mServiceProxy.ChangeGroup(mSessionData.getGroupId(), mSessionData.getEventId(),this);
+
     	
     	//TODO:uaktualnienie bocznego panelu
     	if(wasChange)
@@ -233,7 +236,8 @@ public class MainActivity extends AbstractNavDrawerActivity {
 	    	mTimer.StartTimer();
 	    	
 	    	//Uaktualnienie informacji o grupie i evencie
-	    	mServiceProxy.ChangeGroup(mSessionData.getGroupId(), mSessionData.getEventId());
+	    	if(id != 50)
+	    		mServiceProxy.ChangeGroup(mSessionData.getGroupId(), mSessionData.getEventId(),this);
 		
 		}
 

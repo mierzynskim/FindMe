@@ -23,6 +23,18 @@ public class ServiceProxy {
 
 	private MainActivity mMainActivity;
 	private String mUserId;
+	public String getmCaption() {
+		return mCaption;
+	}
+
+	public String getmEventId() {
+		return mEventId;
+	}
+
+	public String getmGroupId() {
+		return mGroupId;
+	}
+
 	private String mEventId;
 	private String mGroupId;
 	private String mCaption;
@@ -140,9 +152,10 @@ public class ServiceProxy {
 	}
 	
 	//Zmiana grupy
-	public void ChangeGroup(String newGroupId, String newEventId)
+	public void ChangeGroup(String newGroupId, String newEventId, MainActivity mainActivity)
 	{
 		StopService();
+		mMainActivity = mainActivity;
 		mGroupId = newGroupId;
 		mEventId = newEventId;
 		StartService();
