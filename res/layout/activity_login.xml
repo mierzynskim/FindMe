@@ -2,15 +2,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-    <TextView 
+    android:orientation="vertical" >
+
+    <TextView
         android:id="@+id/loginTitle"
-        android:text="@string/app_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:textSize="@dimen/font_size"
-        />
+        android:text="@string/app_name"
+        android:textSize="@dimen/font_size" />
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/images" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:visibility="invisible"
+        style="@android:style/Widget.ProgressBar.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginRight="5dp" />
 
     <com.facebook.widget.LoginButton
         android:id="@+id/authButton"
@@ -18,6 +34,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
-        />
+        android:visibility="gone" />
 
 </LinearLayout>

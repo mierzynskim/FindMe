@@ -11,8 +11,8 @@ import android.util.Log;
 import android.widget.EditText;
 
 import com.facebook.widget.LoginButton;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -54,6 +54,8 @@ public class MainActivity extends AbstractNavDrawerActivity {
 	
 	//Czy by³a zmiana
 	public static Boolean wasChange = true;
+	
+	private Boolean isFirst = true;
 
 
 	@Override
@@ -90,12 +92,17 @@ public class MainActivity extends AbstractNavDrawerActivity {
 						if (arg0 != null){
 							mMap.clear();
 							ArrayList<NavDrawerItem> captionList = new ArrayList<NavDrawerItem>();
-							captionList.add(NavMenuSection.create(10,"Members captions"));
+							captionList.add(NavMenuSection.create(10, "Members captions"));
 							for (UsersLocations usersLocations : arg0) {
+								LatLng userPosition = new LatLng(usersLocations.userLatitude, usersLocations.userLongitude);
 								Log.i("service", String.valueOf(usersLocations.userLatitude) );
+								if (isFirst) {
+									mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userPosition, 13));
+									isFirst = false;
+								}
 								mMap.addMarker(new MarkerOptions().position(new LatLng(usersLocations.userLatitude,
-										usersLocations.userLongitude)));
-								captionList.add(NavMenuSection.create(10, usersLocations.caption));
+										usersLocations.userLongitude)).title("Find me").snippet(usersLocations.caption));
+								captionList.add(NavMenuItem.create(10, usersLocations.caption, "", "ic_action_person", false, MainActivity.this));
 								
 							}
 							
@@ -116,14 +123,6 @@ public class MainActivity extends AbstractNavDrawerActivity {
     	MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
     	mMap = mapFragment.getMap();
 
-    	mMap.setOnMapClickListener(new OnMapClickListener() {
-			@Override
-			public void onMapClick(LatLng point) {
-				mMap.addMarker(new MarkerOptions().position(point));
-				Log.i("tap", "xxx GROUP ADD OK");
-				
-			}
-		});
     	
     	//Wystartowanie timera
     	mTimer.ChangeParameters(mSessionData.getGroupId(), mSessionData.getEventId());

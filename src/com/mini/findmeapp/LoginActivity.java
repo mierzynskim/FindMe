@@ -8,6 +8,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.facebook.AppEventsLogger;
 import com.facebook.Request;
@@ -28,7 +30,8 @@ public class LoginActivity extends FragmentActivity {
 
     private UiLifecycleHelper uiHelper;
 	public static GraphUser user;
-	private String userId; 
+	private String userId;
+	private ProgressBar mProgress;
 
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
@@ -41,6 +44,7 @@ public class LoginActivity extends FragmentActivity {
 	private void onSessionStateChange(Session session, SessionState state,
 			Exception exception) {
 		final Session tmpSession = session;
+		
         if (tmpSession != null && tmpSession.isOpened()) {
         	
             Request.newMeRequest(tmpSession, new Request.GraphUserCallback() {
@@ -52,13 +56,19 @@ public class LoginActivity extends FragmentActivity {
                         	if (userId == null) { 
                         		addNewUser();
                         	}
+                            new Thread(new Runnable() {
 
-                        	Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        	MainActivity.wasChange = true;
-                        	Log.i("service", "MAIN ACTIVITY STARTING");
-                        	startActivity(intent);
-                        	finish();
+                                @Override
+                                public void run() {
+                                  	Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                	MainActivity.wasChange = true;
+                                	Log.i("service", "MAIN ACTIVITY STARTING");
+                                	startActivity(intent);
+                                	finish();
+                                }
+                            }).start();
+  
                         }   
                     }   
                 }   
@@ -104,14 +114,22 @@ public class LoginActivity extends FragmentActivity {
     	SharedPreferences settings = getSharedPreferences(USER_INFO, MODE_PRIVATE);
     	userId = settings.getString("userId", null);
     	
+    	
         super.onCreate(savedInstanceState);
-
+        
         uiHelper = new UiLifecycleHelper(this, callback);
         uiHelper.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login);
-        
         LoginButton authButton = (LoginButton)findViewById(R.id.authButton);
+        if (userId == null)
+        	authButton.setVisibility(View.VISIBLE);
+        else {
+        	mProgress = (ProgressBar) findViewById(R.id.progressBar);
+        	mProgress.setVisibility(View.VISIBLE);
+		}
+        
+        
 		authButton.setReadPermissions(Arrays.asList("email"));
 
     }

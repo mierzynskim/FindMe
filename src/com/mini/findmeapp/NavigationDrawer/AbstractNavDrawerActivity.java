@@ -57,7 +57,7 @@ public abstract class AbstractNavDrawerActivity extends FragmentActivity {
         
         mDrawerListRight = (ListView) findViewById(navConf.getRightDrawerId());
         mDrawerListRight.setAdapter(navConf.getBaseAdapterRight());
-        mDrawerListRight.setOnItemClickListener(new DrawerItemClickListener());
+        //mDrawerListRight.setOnItemClickListener(new DrawerItemClickListener());
         
         this.initDrawerShadow();
         

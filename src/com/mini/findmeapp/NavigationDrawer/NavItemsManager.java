@@ -81,8 +81,6 @@ public class NavItemsManager {
 				++i;
 			}
 			
-			
-			
 			++k;
 		}
 		
