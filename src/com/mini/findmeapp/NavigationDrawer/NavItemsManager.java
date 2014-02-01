@@ -92,6 +92,7 @@ public class NavItemsManager {
 		itemsList.add( NavMenuItem.create(40,"Join existing group", "", "ic_action_add_group", false, mMainActivity) );
 		itemsList.add( NavMenuItem.create(50,"App Settings", "", "ic_action_settings", false, mMainActivity) );
 		itemsList.add( NavMenuItem.create(60,"Change caption", "", "ic_action_settings", false, mMainActivity) );
+		itemsList.add( NavMenuItem.create(70,"Log out", "", "ic_action_settings", false, mMainActivity) );
 		
 		
 		return itemsList.toArray(new NavDrawerItem[0]);

@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,8 @@ import android.text.InputType;
 import android.util.Log;
 import android.widget.EditText;
 
+import com.facebook.Session;
+import com.facebook.SessionLoginBehavior;
 import com.facebook.widget.LoginButton;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -163,6 +166,31 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		return navDrawerActivityConfiguration;
 	}
 	
+	private void callFacebookLogout(Context context) {
+	    Session session = Session.getActiveSession();
+	    if (session != null) {
+
+	        if (!session.isClosed()) {
+	        	
+	        	session.close();
+	            session.closeAndClearTokenInformation();
+            	Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            	Log.i("service", "LOGIN ACTIVITY STARTING");
+            	startActivity(intent);
+            	finish();
+	        }
+	    } else {
+
+	        session = new Session(context);
+	        Session.setActiveSession(session);
+
+	        session.closeAndClearTokenInformation();
+	            //clear your preferences if saved
+
+	    }
+
+	}
 	
 
 	@Override
@@ -218,6 +246,9 @@ public class MainActivity extends AbstractNavDrawerActivity {
 					});
 
 					builder.show();
+					break;
+				case 70:
+					callFacebookLogout(this);
 					break;
 			}
 		}
