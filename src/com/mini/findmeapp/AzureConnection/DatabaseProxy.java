@@ -170,13 +170,35 @@ public class DatabaseProxy {
 										{
 											if((group.isPrivate && group.password.equals(password)) || !group.isPrivate)
 											{
-												UsersGroups usersgroups = new UsersGroups();
+												final UsersGroups usersgroups = new UsersGroups();
 												usersgroups.groupId = group.Id;
 												usersgroups.userId = user.Id;
 												
-												MobileServiceTable<UsersGroups> usersGroups = mClient.getTable(UsersGroups.class);
+												final MobileServiceTable<UsersGroups> usersGroups = mClient.getTable(UsersGroups.class);
 												
-												usersGroups.insert(usersgroups, onInsertCallback);
+												usersGroups.where().field("groupId").eq(group.Id).and().field("userId").eq(user.Id).execute(new TableQueryCallback<UsersGroups>() {
+													
+													@Override
+													public void onCompleted(List<UsersGroups> arg0, int arg1, Exception arg2,
+															ServiceFilterResponse arg3) {
+														// TODO Auto-generated method stub
+														
+														if(arg2 == null)
+														{
+															if(arg0.isEmpty())
+																usersGroups.insert(usersgroups, onInsertCallback);
+															else
+															{
+																CharSequence text = "You are already a member";
+																int duration = Toast.LENGTH_SHORT;
+																Toast toast = Toast.makeText(mContext.getApplicationContext(), text, duration);
+																toast.show();
+															}
+																
+														}
+														
+													}
+												});
 											}
 
 										}
