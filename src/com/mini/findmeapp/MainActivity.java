@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.R.integer;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,6 +18,8 @@ import com.facebook.Session;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
@@ -62,9 +65,8 @@ public class MainActivity extends AbstractNavDrawerActivity {
 	
 	private Map<Integer, LatLng> locations = new HashMap<Integer, LatLng>();
 	
+	private final float[] colors = new float[]{0, 210, 240, 180, 120, 300, 30, 330, 270, };
 	
-
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 
@@ -97,19 +99,19 @@ public class MainActivity extends AbstractNavDrawerActivity {
 				if (arg0 != null){
 					mMap.clear();
 					int idValue = 500;
+					int i = 0;
 					locations.clear();
 					ArrayList<NavDrawerItem> captionList = new ArrayList<NavDrawerItem>();
 					captionList.add(NavMenuSection.create(10, "Members captions"));
 					for (UsersLocations usersLocations : arg0) {
-						
+						BitmapDescriptor bitmapDescriptor  = BitmapDescriptorFactory.defaultMarker(colors[(i++) % 10]);
 						LatLng userPosition = new LatLng(usersLocations.userLatitude, usersLocations.userLongitude);
 						Log.i("service", String.valueOf(usersLocations.userLatitude) );
 						if (isFirst) {
 							mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userPosition, 13));
 							isFirst = false;
 						}
-						mMap.addMarker(new MarkerOptions().position(new LatLng(usersLocations.userLatitude,
-								usersLocations.userLongitude)).title("Find me").snippet(usersLocations.caption));
+						mMap.addMarker(new MarkerOptions().position(userPosition).title("Find me").snippet(usersLocations.caption).icon(bitmapDescriptor));
 						captionList.add(NavMenuItem.create(++idValue, usersLocations.caption, "", "ic_action_person", false, MainActivity.this));
 						locations.put(idValue, userPosition);				}
 
