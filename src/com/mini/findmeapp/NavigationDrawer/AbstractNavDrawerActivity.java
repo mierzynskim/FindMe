@@ -52,12 +52,12 @@ public abstract class AbstractNavDrawerActivity extends FragmentActivity {
         mDrawerLayout = (DrawerLayout) findViewById(navConf.getDrawerLayoutId());
         mDrawerListLeft = (ListView) findViewById(navConf.getLeftDrawerId());
         mDrawerListLeft.setAdapter(navConf.getBaseAdapterLeft());
-        mDrawerListLeft.setOnItemClickListener(new DrawerItemClickListener());
+        mDrawerListLeft.setOnItemClickListener(new DrawerLeftItemClickListener());
         
         
         mDrawerListRight = (ListView) findViewById(navConf.getRightDrawerId());
         mDrawerListRight.setAdapter(navConf.getBaseAdapterRight());
-        //mDrawerListRight.setOnItemClickListener(new DrawerItemClickListener());
+        mDrawerListRight.setOnItemClickListener(new DrawerRightItemClickListener());
         
         this.initDrawerShadow();
         
@@ -156,6 +156,12 @@ public abstract class AbstractNavDrawerActivity extends FragmentActivity {
             for( int iItem : navConf.getActionMenuItemsToHideWhenDrawerOpen()) {
                 menu.findItem(iItem).setVisible(!drawerOpen);
             }
+            
+            boolean drawerOpenRight = mDrawerLayout.isDrawerOpen(mDrawerListRight);
+            for( int iItem : navConf.getActionMenuItemsToHideWhenDrawerOpen()) {
+                menu.findItem(iItem).setVisible(!drawerOpenRight);
+            }
+
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -192,14 +198,21 @@ public abstract class AbstractNavDrawerActivity extends FragmentActivity {
         return mDrawerToggle;
     }
    
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+    private class DrawerLeftItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItem(position);
+            selectLeftItem(position);
         }
     }
     
-    public void selectItem(int position) {
+    private class DrawerRightItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectRightItem(position);
+        }
+    }
+    
+    public void selectLeftItem(int position) {
         NavDrawerItem selectedItem = navConf.getNavItemsLeft()[position];
         
         this.onNavItemSelected(selectedItem.getId());
@@ -215,6 +228,22 @@ public abstract class AbstractNavDrawerActivity extends FragmentActivity {
         }
     }
     
+    public void selectRightItem(int position) {
+        NavDrawerItem selectedItem = navConf.getNavItemsRight()[position];
+        
+        this.onNavItemSelected(selectedItem.getId());
+        mDrawerListRight.setItemChecked(position, true);
+        
+        if ( selectedItem.updateActionBarTitle()) {
+            setTitle(selectedItem.getLabel());
+            setSubtitle(selectedItem.getSublabel());
+        }
+        
+        if ( this.mDrawerLayout.isDrawerOpen(this.mDrawerListRight)) {
+            mDrawerLayout.closeDrawer(mDrawerListRight);
+        }
+    }
+    
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
@@ -225,23 +254,5 @@ public abstract class AbstractNavDrawerActivity extends FragmentActivity {
         mSubtitle = subtitle;
         getActionBar().setSubtitle(subtitle);
     }
-    
-	protected void addGroup(NavDrawerItem[] leftMenu, NavDrawerItem[] rightMenu) {
-		
-		if (leftMenu != null) {
-		navConf.setNavItemsLeft(leftMenu);
-		navConf.setBaseAdapterLeft(
-				new NavDrawerAdapter(this, R.layout.navdrawer_item, leftMenu ));
-		}
-		if (rightMenu != null) {
-		navConf.setNavItemsRight(rightMenu);
-		navConf.setBaseAdapterRight(
-				new NavDrawerAdapter(this, R.layout.navdrawer_item, rightMenu ));
-		}
-		refreshDrawer();
-	}
-    
-    
-    
     
 }
