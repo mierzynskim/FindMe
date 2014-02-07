@@ -169,6 +169,9 @@ public abstract class AbstractNavDrawerActivity extends FragmentActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
+            if (mDrawerLayout.isDrawerVisible(this.mDrawerListRight) != false) {
+            	mDrawerLayout.closeDrawer(this.mDrawerListRight);
+            }
             return true;
         }
         else {
