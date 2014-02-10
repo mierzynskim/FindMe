@@ -98,6 +98,13 @@ public class MainActivity extends AbstractNavDrawerActivity {
 					Exception arg2, ServiceFilterResponse arg3) {
 				if (arg0 != null){
 					mMap.clear();
+					
+					//Ustawienie markera eventu
+					Events event = mNavItemsManager.getEventById(mSessionData.getEventId());
+					LatLng eventLocation = new LatLng(event.locationLatitude, event.locationLongitude);
+					BitmapDescriptor bmp = BitmapDescriptorFactory.defaultMarker((float) 300);
+					mMap.addMarker(new MarkerOptions().position(eventLocation).title(event.name).snippet(event.description).icon(bmp));
+					
 					int idValue = 500;
 					int i = 0;
 					locations.clear();

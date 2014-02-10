@@ -54,6 +54,23 @@ public class NavItemsManager {
 		
 	}
 	
+	public Events getEventById(String eventId)
+	{
+		Events event = new Events();
+		
+		for( ArrayList<Events> list : mEventsArrayList)
+		{
+			for( Events item : list)
+			{
+				if(item.Id.equalsIgnoreCase(eventId))
+					return item;
+			}
+		}
+		
+		
+		return event;
+	}
+	
 	public Groups getGroupAt(Integer code)
 	{
 		Integer groupIndex = ( code / 100 ) - 1;
